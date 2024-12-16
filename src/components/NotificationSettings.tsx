@@ -65,9 +65,17 @@ export function NotificationSettings() {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           const registration = await navigator.serviceWorker.ready;
+          
+          // Get VAPID public key from Edge Function
+          const { data: { vapidPublicKey }, error: vapidError } = await supabase.functions.invoke('get-vapid-key');
+          
+          if (vapidError) {
+            throw new Error('Failed to get VAPID key');
+          }
+
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY' // This should be replaced with your actual VAPID public key
+            applicationServerKey: vapidPublicKey
           });
 
           // Test notification via Edge Function
