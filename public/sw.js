@@ -1,3 +1,6 @@
+/// <reference lib="webworker" />
+declare const self: ServiceWorkerGlobalScope;
+
 importScripts('/src/service-worker/cache-manager.ts');
 importScripts('/src/service-worker/notification-handler.ts');
 importScripts('/src/service-worker/sync-manager.ts');

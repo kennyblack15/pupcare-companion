@@ -1,4 +1,6 @@
-export async function syncMedications() {
+declare const self: ServiceWorkerGlobalScope;
+
+export async function syncMedications(): Promise<void> {
   try {
     const response = await fetch('/api/sync-medications', {
       method: 'POST',
