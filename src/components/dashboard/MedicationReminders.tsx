@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pill, Clock } from "lucide-react";
+import { Pill, Clock, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function MedicationReminders() {
   const { data: medications, isLoading } = useQuery({
@@ -28,8 +30,18 @@ export function MedicationReminders() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Loading medications...</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Pill className="w-5 h-5" />
+            Medication Reminders
+          </CardTitle>
         </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Array(3).fill(0).map((_, i) => (
+              <Skeleton key={i} className="h-24" />
+            ))}
+          </div>
+        </CardContent>
       </Card>
     );
   }
@@ -38,10 +50,15 @@ export function MedicationReminders() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Medication Reminders</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Pill className="w-5 h-5" />
+            Medication Reminders
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-500">No active medications</p>
+        <CardContent className="text-center py-8">
+          <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-500 mb-4">No active medications</p>
+          <Button variant="outline">Add Medication</Button>
         </CardContent>
       </Card>
     );
@@ -58,7 +75,10 @@ export function MedicationReminders() {
       <CardContent>
         <div className="space-y-4">
           {medications.map((med) => (
-            <div key={med.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+            <div 
+              key={med.id} 
+              className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            >
               <div className="p-2 bg-primary/10 rounded-full">
                 <Clock className="w-4 h-4 text-primary" />
               </div>

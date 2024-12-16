@@ -1,7 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { AddMedicationDialog } from "./medications/AddMedicationDialog";
-import { Dog as DogIcon, Calendar, Weight } from "lucide-react";
+import { Dog as DogIcon, Calendar, Weight, ChevronRight } from "lucide-react";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface Dog {
   id: string;
@@ -12,6 +14,8 @@ interface Dog {
 }
 
 export function DogCard({ dog }: { dog: Dog }) {
+  const navigate = useNavigate();
+
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow">
       <div className="flex items-center justify-between mb-4">
@@ -24,7 +28,17 @@ export function DogCard({ dog }: { dog: Dog }) {
             {dog.breed && <p className="text-gray-600 text-sm">{dog.breed}</p>}
           </div>
         </div>
-        <AddMedicationDialog dogId={dog.id} />
+        <div className="flex items-center gap-2">
+          <AddMedicationDialog dogId={dog.id} />
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate(`/health?dogId=${dog.id}`)}
+            className="text-gray-500 hover:text-primary"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
       <div className="space-y-2">
         {dog.birth_date && (

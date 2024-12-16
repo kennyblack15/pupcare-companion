@@ -10,6 +10,7 @@ import { DogProfilesSection } from "@/components/dashboard/DogProfilesSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AIChatDialog } from "@/components/AIChatDialog";
 import { MedicationReminders } from "@/components/dashboard/MedicationReminders";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -81,12 +82,32 @@ const Index = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="max-w-7xl mx-auto p-6 space-y-8 animate-pulse">
-          <div className="h-20 bg-gray-200 rounded-lg"></div>
+        <div className="max-w-7xl mx-auto p-6 space-y-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <Skeleton className="h-10 w-64" />
+              <Skeleton className="h-6 w-48 mt-2" />
+            </div>
+            <Skeleton className="h-10 w-32" />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {Array(4).fill(0).map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+              <Skeleton key={i} className="h-32" />
             ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-32" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Array(2).fill(0).map((_, i) => (
+                  <Skeleton key={i} className="h-48" />
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-[400px]" />
+            </div>
           </div>
         </div>
       </Layout>
