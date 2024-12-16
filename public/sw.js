@@ -4,18 +4,35 @@ importScripts('./service-worker/sync-manager.js');
 // Cache name for storing assets
 const CACHE_NAME = 'pawcare-v1';
 
+// Force HTTPS
+self.addEventListener('fetch', (event) => {
+  // Check if the request is for HTTP
+  if (event.request.url.startsWith('http:') && !event.request.url.includes('localhost')) {
+    // Create a new request with HTTPS
+    const secureUrl = event.request.url.replace('http:', 'https:');
+    event.respondWith(
+      fetch(new Request(secureUrl, event.request))
+    );
+    return;
+  }
+
+  // Handle other requests normally
+  if (event.request.method !== 'GET') return;
+  event.respondWith(handleFetch(event));
+});
+
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
-        '/',
-        '/index.html',
-        '/manifest.json',
-        '/icons/icon-192x192.png',
-        '/icons/icon-512x512.png',
-        '/icons/maskable_icon_x192.png',
-        '/icons/maskable_icon_x512.png'
+        './',
+        './index.html',
+        './manifest.json',
+        './icons/icon-192x192.png',
+        './icons/icon-512x512.png',
+        './icons/maskable_icon_x192.png',
+        './icons/maskable_icon_x512.png'
       ]);
     })
   );
@@ -28,26 +45,12 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - handle offline support
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(handleFetch(event));
-});
-
-// Sync event - handle background sync
-self.addEventListener('sync', (event) => {
-  if (event.tag.startsWith('sync-')) {
-    const storeName = event.tag.replace('sync-', '');
-    event.waitUntil(syncData(storeName));
-  }
-});
-
 // Push event - handle notifications
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data?.text() ?? 'New notification',
-    icon: '/icons/maskable_icon_x192.png',
-    badge: '/icons/maskable_icon_x72.png'
+    icon: './icons/maskable_icon_x192.png',
+    badge: './icons/maskable_icon_x72.png'
   };
 
   event.waitUntil(
@@ -58,7 +61,15 @@ self.addEventListener('push', (event) => {
 // Notification click event
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(clients.openWindow('/'));
+  event.waitUntil(clients.openWindow('./'));
+});
+
+// Sync event - handle background sync
+self.addEventListener('sync', (event) => {
+  if (event.tag.startsWith('sync-')) {
+    const storeName = event.tag.replace('sync-', '');
+    event.waitUntil(syncData(storeName));
+  }
 });
 
 // Helper function to sync data
@@ -67,7 +78,7 @@ async function syncData(storeName) {
   
   for (const record of records) {
     try {
-      const response = await fetch(`/api/${storeName}`, {
+      const response = await fetch(`./api/${storeName}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record.data)

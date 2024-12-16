@@ -97,7 +97,7 @@
     
     <script>
       // Force HTTPS before anything else loads
-      if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+      if (window.location.protocol === 'http:' && !window.location.hostname.includes('localhost')) {
         window.location.href = window.location.href.replace('http:', 'https:');
       }
       
