@@ -31,6 +31,10 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
@@ -52,6 +56,54 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-health-records') {
+    event.waitUntil(syncHealthRecords());
+  } else if (event.tag === 'sync-medications') {
+    event.waitUntil(syncMedications());
+  }
+});
+
+async function syncHealthRecords() {
+  try {
+    const records = await getUnsyncedHealthRecords();
+    await Promise.all(records.map(record => 
+      fetch('/api/health-records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record)
+      })
+    ));
+  } catch (error) {
+    console.error('Error syncing health records:', error);
+  }
+}
+
+async function syncMedications() {
+  try {
+    const medications = await getUnsyncedMedications();
+    await Promise.all(medications.map(medication => 
+      fetch('/api/medications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(medication)
+      })
+    ));
+  } catch (error) {
+    console.error('Error syncing medications:', error);
+  }
+}
+
+async function getUnsyncedHealthRecords() {
+  // Implementation will be added when IndexedDB is set up
+  return [];
+}
+
+async function getUnsyncedMedications() {
+  // Implementation will be added when IndexedDB is set up
+  return [];
+}
 
 self.addEventListener('push', (event) => {
   const options = {
