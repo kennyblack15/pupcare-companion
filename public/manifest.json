@@ -9,6 +9,27 @@
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
+  "dir": "ltr",
+  "categories": ["lifestyle", "health", "pets"],
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
+  "screenshots": [
+    {
+      "src": "/screenshots/home-light.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Home screen in light mode"
+    },
+    {
+      "src": "/screenshots/home-dark.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Home screen in dark mode"
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
