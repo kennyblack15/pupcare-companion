@@ -3,7 +3,7 @@
   "short_name": "PawCare",
   "id": "pawcare-companion-v1",
   "description": "Your complete pet care management solution - Track health records, medications, grooming schedules and more for your beloved pets",
-  "start_url": "/",
+  "start_url": "https://pawcare.app/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay"],
@@ -22,11 +22,6 @@
     }
   ],
   "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=app.pawcare.companion",
-      "id": "app.pawcare.companion"
-    },
     {
       "platform": "webapp",
       "url": "https://pawcare.app",
@@ -62,139 +57,49 @@
   },
   "icons": [
     {
-      "src": "/icons/maskable_icon_x72.png",
+      "src": "https://pawcare.app/icons/maskable_icon_x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/maskable_icon_x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x192.png",
+      "src": "https://pawcare.app/icons/maskable_icon_x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/maskable_icon_x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x512.png",
+      "src": "https://pawcare.app/icons/maskable_icon_x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/icon-72x72.png",
+      "src": "https://pawcare.app/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
+      "src": "https://pawcare.app/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
+      "src": "https://pawcare.app/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Add Pet",
-      "short_name": "Add Pet",
-      "description": "Add a new pet profile",
-      "url": "/profiles?action=add",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Health Records",
-      "short_name": "Health",
-      "description": "View health records",
-      "url": "/health",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/home.png",
+      "src": "https://pawcare.app/screenshots/home.png",
       "sizes": "1080x2340",
       "type": "image/png",
       "platform": "narrow",
       "label": "Home Screen"
-    },
-    {
-      "src": "/screenshots/health.png",
-      "sizes": "1080x2340",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Health Records"
-    },
-    {
-      "src": "/screenshots/profile.png",
-      "sizes": "1080x2340",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Pet Profile"
     }
   ]
 }

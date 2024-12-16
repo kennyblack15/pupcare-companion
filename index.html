@@ -14,7 +14,7 @@
     <meta name="msapplication-TileColor" content="#8B5CF6" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;" />
     
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="website" />
@@ -180,7 +180,6 @@
         });
       }
     </script>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
