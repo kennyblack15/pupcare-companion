@@ -10,11 +10,7 @@
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
   "dir": "ltr",
-  "categories": [
-    "lifestyle",
-    "pets",
-    "health"
-  ],
+  "categories": ["lifestyle", "pets", "health"],
   "launch_handler": {
     "client_mode": ["focus-existing", "auto"]
   },
@@ -23,14 +19,14 @@
       "src": "/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "platform": "wide",
-      "label": "Homescreen of PawCare Companion"
+      "form_factor": "wide",
+      "label": "Homescreen of PawCare Companion in light mode"
     },
     {
       "src": "/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "platform": "wide",
+      "form_factor": "wide",
       "label": "Homescreen of PawCare Companion in dark mode"
     }
   ],
