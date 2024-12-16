@@ -1,5 +1,6 @@
 importScripts('./service-worker/cache-manager.js');
 importScripts('./service-worker/sync-manager.js');
+importScripts('./service-worker/notification-handler.js');
 
 // Cache name for storing assets
 const CACHE_NAME = 'pawcare-v1';
@@ -42,7 +43,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate event - cleanup old caches
+// Activate event - cleanup old caches and register periodic sync
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     Promise.all([
@@ -77,6 +78,16 @@ self.addEventListener('periodicsync', (event) => {
   if (event.tag === PERIODIC_SYNC_TAG) {
     event.waitUntil(updateAppContent());
   }
+});
+
+// Push notification event
+self.addEventListener('push', (event) => {
+  event.waitUntil(handlePushEvent(event));
+});
+
+// Notification click event
+self.addEventListener('notificationclick', (event) => {
+  event.waitUntil(handleNotificationClick(event));
 });
 
 // Helper function to sync data
@@ -115,6 +126,21 @@ async function updateAppContent() {
           }
         } catch (error) {
           console.error(`Failed to update ${url}:`, error);
+        }
+      })
+    );
+
+    // Update dynamic content
+    const dynamicRoutes = ['/', '/health', '/medications', '/grooming'];
+    await Promise.all(
+      dynamicRoutes.map(async (route) => {
+        try {
+          const response = await fetch(route, { cache: 'no-cache' });
+          if (response.ok) {
+            await cache.put(route, response);
+          }
+        } catch (error) {
+          console.error(`Failed to update ${route}:`, error);
         }
       })
     );
