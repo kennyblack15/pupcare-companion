@@ -21,7 +21,7 @@ export async function addToSyncQueue(storeName: string, data: any): Promise<void
         try {
           const registration = await navigator.serviceWorker.ready;
           if ('sync' in registration) {
-            await (registration as ServiceWorkerRegistrationWithSync).sync.register(`sync-${storeName}`);
+            await (registration as unknown as ServiceWorkerRegistrationWithSync).sync.register(`sync-${storeName}`);
           } else {
             console.warn('Background Sync not supported in this browser');
           }

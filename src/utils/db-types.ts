@@ -10,16 +10,11 @@ export interface DBSchema {
 }
 
 export interface SyncManager {
-  sync: (tag: string) => Promise<void>;
+  register(tag: string): Promise<void>;
 }
 
 declare global {
   interface ServiceWorkerRegistration {
     sync?: SyncManager;
-  }
-
-  interface SyncEvent extends Event {
-    tag: string;
-    waitUntil(promise: Promise<void>): void;
   }
 }
