@@ -10,7 +10,7 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, icon: Icon, trend }: StatsCardProps) {
   return (
-    <Card className="p-6 bg-white hover:shadow-lg transition-shadow">
+    <Card className="p-6 bg-white hover:shadow-lg transition-all duration-300 group">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -28,7 +28,7 @@ export function StatsCard({ title, value, icon: Icon, trend }: StatsCardProps) {
             </div>
           )}
         </div>
-        <div className="p-4 bg-primary/10 rounded-full">
+        <div className="p-4 bg-primary/10 rounded-full group-hover:scale-110 transition-transform duration-300">
           <Icon className="w-6 h-6 text-primary" />
         </div>
       </div>

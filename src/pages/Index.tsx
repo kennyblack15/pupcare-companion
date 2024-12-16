@@ -118,15 +118,22 @@ const Index = () => {
   return (
     <Layout>
       <div className="max-w-7xl mx-auto space-y-8 p-6 animate-fadeIn">
-        <Card className="p-6 bg-gradient-to-r from-primary/10 to-primary/5">
-          <div className="flex justify-between items-center">
+        <Card className="p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-none shadow-lg">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">Welcome to PawCare</h1>
-              <p className="text-gray-600 mt-2">Manage your pets' health and care in one place</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
+                Welcome to PawCare
+              </h1>
+              <p className="text-gray-600 mt-2">
+                Manage your pets' health and care in one place
+              </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full md:w-auto">
               <AIChatDialog />
-              <Button onClick={() => navigate('/profiles')} className="gap-2 shadow-lg hover:shadow-xl transition-shadow">
+              <Button 
+                onClick={() => navigate('/profiles')} 
+                className="w-full md:w-auto gap-2 shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90"
+              >
                 <Plus className="w-4 h-4" />
                 Add Dog
               </Button>
