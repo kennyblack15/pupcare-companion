@@ -1,5 +1,10 @@
 /// <reference lib="webworker" />
 
+interface SyncEvent extends Event {
+  tag: string;
+  waitUntil(promise: Promise<any>): void;
+}
+
 export async function syncMedications(): Promise<void> {
   try {
     const response = await fetch('/api/sync-medications', {

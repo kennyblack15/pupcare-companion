@@ -7,6 +7,12 @@ interface SyncableRecord {
   data: any;
 }
 
+interface ServiceWorkerRegistrationWithSync extends ServiceWorkerRegistration {
+  sync: {
+    register(tag: string): Promise<void>;
+  };
+}
+
 export async function initDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -44,12 +50,12 @@ export async function addToSyncQueue(storeName: string, data: any): Promise<void
     
     request.onerror = () => reject(request.error);
     request.onsuccess = async () => {
-      // Request background sync if supported
       if ('serviceWorker' in navigator) {
         try {
           const registration = await navigator.serviceWorker.ready;
           if ('sync' in registration) {
-            await (registration as any).sync.register(`sync-${storeName}`);
+            const syncRegistration = registration as ServiceWorkerRegistrationWithSync;
+            await syncRegistration.sync.register(`sync-${storeName}`);
           } else {
             console.warn('Background Sync not supported in this browser');
           }
