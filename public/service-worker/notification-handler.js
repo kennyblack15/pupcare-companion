@@ -1,13 +1,5 @@
-/// <reference lib="webworker" />
-
-interface NotificationData {
-  title?: string;
-  body?: string;
-  url?: string;
-}
-
-export function handlePushEvent(event: PushEvent): Promise<void> {
-  const data: NotificationData = event.data?.json() ?? {};
+function handlePushEvent(event) {
+  const data = event.data?.json() ?? {};
   const options = {
     body: data.body || 'Time to take care of your pet!',
     icon: '/icons/icon-192x192.png',
@@ -31,7 +23,7 @@ export function handlePushEvent(event: PushEvent): Promise<void> {
   );
 }
 
-export function handleNotificationClick(event: NotificationEvent): Promise<WindowClient | undefined> {
+function handleNotificationClick(event) {
   event.notification.close();
 
   if (event.action === 'view') {

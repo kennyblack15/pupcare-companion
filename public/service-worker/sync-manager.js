@@ -1,8 +1,10 @@
 class SyncManager {
-  private dbName = 'pawcare-offline-store';
-  private version = 1;
+  constructor() {
+    this.dbName = 'pawcare-offline-store';
+    this.version = 1;
+  }
 
-  async openDB(): Promise<IDBDatabase> {
+  async openDB() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.version);
 
@@ -10,9 +12,8 @@ class SyncManager {
       request.onsuccess = () => resolve(request.result);
 
       request.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
+        const db = event.target.result;
         
-        // Create stores for all data types that need offline sync
         ['health_records', 'medications', 'grooming_tasks', 'dogs'].forEach(store => {
           if (!db.objectStoreNames.contains(store)) {
             db.createObjectStore(store, { keyPath: 'id' });
@@ -22,7 +23,7 @@ class SyncManager {
     });
   }
 
-  async addToQueue(storeName: string, data: any): Promise<void> {
+  async addToQueue(storeName, data) {
     const db = await this.openDB();
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
@@ -41,18 +42,12 @@ class SyncManager {
       
       tx.oncomplete = () => {
         db.close();
-        // Register for background sync
-        if ('serviceWorker' in navigator && 'sync' in registration) {
-          navigator.serviceWorker.ready.then(registration => {
-            registration.sync.register(`sync-${storeName}`);
-          });
-        }
         resolve();
       };
     });
   }
 
-  async getUnsynced(storeName: string): Promise<any[]> {
+  async getUnsynced(storeName) {
     const db = await this.openDB();
     const tx = db.transaction(storeName, 'readonly');
     const store = tx.objectStore(storeName);
@@ -70,7 +65,7 @@ class SyncManager {
     });
   }
 
-  async markSynced(storeName: string, id: string): Promise<void> {
+  async markSynced(storeName, id) {
     const db = await this.openDB();
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
@@ -93,4 +88,4 @@ class SyncManager {
   }
 }
 
-export const syncManager = new SyncManager();
+const syncManager = new SyncManager();
