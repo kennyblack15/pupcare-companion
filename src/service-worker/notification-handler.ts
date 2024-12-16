@@ -8,7 +8,7 @@ interface NotificationData {
 
 export function handlePushEvent(event: PushEvent): Promise<void> {
   const data: NotificationData = event.data?.json() ?? {};
-  const options: NotificationOptions = {
+  const options = {
     body: data.body || 'Time to take care of your pet!',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
@@ -16,20 +16,10 @@ export function handlePushEvent(event: PushEvent): Promise<void> {
       dateOfArrival: Date.now(),
       primaryKey: 1,
       url: data.url || '/'
-    },
-    actions: [
-      {
-        action: 'view',
-        title: 'View Details',
-      },
-      {
-        action: 'close',
-        title: 'Close',
-      },
-    ],
+    }
   };
 
-  return self.registration.showNotification(
+  return (self as unknown as ServiceWorkerGlobalScope).registration.showNotification(
     data.title || 'PawCare Reminder',
     options
   );
@@ -40,7 +30,7 @@ export function handleNotificationClick(event: Event): Promise<WindowClient | un
     event.notification.close();
 
     if (event.action === 'view') {
-      return self.clients.openWindow(event.notification.data.url);
+      return (self as unknown as ServiceWorkerGlobalScope).clients.openWindow(event.notification.data.url);
     }
   }
   return Promise.resolve(undefined);
