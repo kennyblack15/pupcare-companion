@@ -1,4 +1,4 @@
-declare const self: ServiceWorkerGlobalScope;
+/// <reference lib="webworker" />
 
 export async function syncMedications(): Promise<void> {
   try {

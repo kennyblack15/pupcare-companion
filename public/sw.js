@@ -1,8 +1,10 @@
 /// <reference lib="webworker" />
-declare const self: ServiceWorkerGlobalScope;
 
+// @ts-ignore
 importScripts('/src/service-worker/cache-manager.ts');
+// @ts-ignore
 importScripts('/src/service-worker/notification-handler.ts');
+// @ts-ignore
 importScripts('/src/service-worker/sync-manager.ts');
 
 // Install event - cache core assets

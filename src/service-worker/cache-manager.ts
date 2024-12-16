@@ -1,3 +1,5 @@
+/// <reference lib="webworker" />
+
 const CACHE_NAME = 'pawcare-v1';
 const urlsToCache = [
   '/',
@@ -8,47 +10,50 @@ const urlsToCache = [
   '/src/assets/*'
 ];
 
-declare const self: ServiceWorkerGlobalScope;
-
 export async function initializeCache(): Promise<void> {
   const cache = await caches.open(CACHE_NAME);
   await cache.addAll(urlsToCache);
 }
 
-export async function cleanupOldCaches(): Promise<void[]> {
+export async function cleanupOldCaches(): Promise<void> {
   const cacheNames = await caches.keys();
-  return Promise.all(
-    cacheNames.map((cacheName) => {
+  await Promise.all(
+    cacheNames.map(async (cacheName) => {
       if (cacheName !== CACHE_NAME) {
-        return caches.delete(cacheName);
+        await caches.delete(cacheName);
       }
-      return Promise.resolve();
     })
   );
 }
 
-export async function handleFetch(event: ExtendableEvent & { request: Request }): Promise<Response> {
-  if ((event as FetchEvent).request.method !== 'GET') return fetch((event as FetchEvent).request);
+export async function handleFetch(event: FetchEvent): Promise<Response> {
+  if (event.request.method !== 'GET') {
+    return fetch(event.request);
+  }
 
   try {
-    const response = await fetch((event as FetchEvent).request);
+    const response = await fetch(event.request);
     if (!response || response.status !== 200 || response.type !== 'basic') {
       return response;
     }
 
     const responseToCache = response.clone();
     const cache = await caches.open(CACHE_NAME);
-    await cache.put((event as FetchEvent).request, responseToCache);
+    await cache.put(event.request, responseToCache);
 
     return response;
   } catch (error) {
-    const cachedResponse = await caches.match((event as FetchEvent).request);
+    const cachedResponse = await caches.match(event.request);
     if (cachedResponse) {
       return cachedResponse;
     }
     
-    if ((event as FetchEvent).request.mode === 'navigate') {
-      return caches.match('/index.html') as Promise<Response>;
+    if (event.request.mode === 'navigate') {
+      const indexResponse = await caches.match('/index.html');
+      return indexResponse || new Response('Network error', {
+        status: 408,
+        headers: { 'Content-Type': 'text/plain' },
+      });
     }
     
     return new Response('Network error', {

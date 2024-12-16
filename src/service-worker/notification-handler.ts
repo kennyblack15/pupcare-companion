@@ -1,4 +1,4 @@
-declare const self: ServiceWorkerGlobalScope;
+/// <reference lib="webworker" />
 
 interface NotificationData {
   title?: string;
@@ -6,13 +6,12 @@ interface NotificationData {
   url?: string;
 }
 
-export function handlePushEvent(event: PushMessageEvent): Promise<void> {
+export function handlePushEvent(event: PushEvent): Promise<void> {
   const data: NotificationData = event.data?.json() ?? {};
   const options: NotificationOptions = {
     body: data.body || 'Time to take care of your pet!',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
-    vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 1,
@@ -36,11 +35,13 @@ export function handlePushEvent(event: PushMessageEvent): Promise<void> {
   );
 }
 
-export function handleNotificationClick(event: NotificationEvent): Promise<WindowClient | null> {
-  event.notification.close();
+export function handleNotificationClick(event: Event): Promise<WindowClient | undefined> {
+  if (event instanceof NotificationEvent) {
+    event.notification.close();
 
-  if (event.action === 'view') {
-    return self.clients.openWindow(event.notification.data.url);
+    if (event.action === 'view') {
+      return self.clients.openWindow(event.notification.data.url);
+    }
   }
-  return Promise.resolve(null);
+  return Promise.resolve(undefined);
 }
