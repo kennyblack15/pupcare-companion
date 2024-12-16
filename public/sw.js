@@ -3,6 +3,17 @@ importScripts('./service-worker/sync-manager.js');
 
 // Cache name for storing assets
 const CACHE_NAME = 'pawcare-v1';
+const PERIODIC_SYNC_TAG = 'periodic-sync';
+
+// Assets to cache
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/offline.html',
+  'https://pupcare-companion.lovable.app/icons/icon-192x192.png',
+  'https://pupcare-companion.lovable.app/icons/icon-512x512.png'
+];
 
 // Force HTTPS
 self.addEventListener('fetch', (event) => {
@@ -25,27 +36,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        '/',
-        '/index.html',
-        '/manifest.json',
-        'https://pupcare-companion.lovable.app/icons/icon-72x72.png',
-        'https://pupcare-companion.lovable.app/icons/icon-96x96.png',
-        'https://pupcare-companion.lovable.app/icons/icon-128x128.png',
-        'https://pupcare-companion.lovable.app/icons/icon-144x144.png',
-        'https://pupcare-companion.lovable.app/icons/icon-152x152.png',
-        'https://pupcare-companion.lovable.app/icons/icon-192x192.png',
-        'https://pupcare-companion.lovable.app/icons/icon-384x384.png',
-        'https://pupcare-companion.lovable.app/icons/icon-512x512.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x72.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x96.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x128.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x144.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x152.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x192.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x384.png',
-        'https://pupcare-companion.lovable.app/icons/maskable_icon_x512.png'
-      ]);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
@@ -53,34 +44,38 @@ self.addEventListener('install', (event) => {
 
 // Activate event - cleanup old caches
 self.addEventListener('activate', (event) => {
-  event.waitUntil(cleanupOldCaches());
+  event.waitUntil(
+    Promise.all([
+      cleanupOldCaches(),
+      // Enable periodic background sync if supported
+      (async () => {
+        if ('periodicSync' in self.registration) {
+          try {
+            await self.registration.periodicSync.register(PERIODIC_SYNC_TAG, {
+              minInterval: 24 * 60 * 60 * 1000 // 24 hours
+            });
+          } catch (error) {
+            console.error('Periodic Sync could not be registered:', error);
+          }
+        }
+      })()
+    ])
+  );
   self.clients.claim();
 });
 
-// Push event - handle notifications
-self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data?.text() ?? 'New notification',
-    icon: '/icons/maskable_icon_x192.png',
-    badge: '/icons/maskable_icon_x72.png'
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('PawCare', options)
-  );
-});
-
-// Notification click event
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(clients.openWindow('/'));
-});
-
-// Sync event - handle background sync
+// Background sync event
 self.addEventListener('sync', (event) => {
   if (event.tag.startsWith('sync-')) {
     const storeName = event.tag.replace('sync-', '');
     event.waitUntil(syncData(storeName));
+  }
+});
+
+// Periodic background sync event
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === PERIODIC_SYNC_TAG) {
+    event.waitUntil(updateAppContent());
   }
 });
 
@@ -103,4 +98,58 @@ async function syncData(storeName) {
       console.error(`Sync failed for ${storeName}:`, error);
     }
   }
+}
+
+// Helper function to update app content
+async function updateAppContent() {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    
+    // Update static assets
+    await Promise.all(
+      STATIC_ASSETS.map(async (url) => {
+        try {
+          const response = await fetch(url, { cache: 'no-cache' });
+          if (response.ok) {
+            await cache.put(url, response);
+          }
+        } catch (error) {
+          console.error(`Failed to update ${url}:`, error);
+        }
+      })
+    );
+  } catch (error) {
+    console.error('Failed to update app content:', error);
+  }
+}
+
+// Helper function to handle fetch events
+async function handleFetch(event) {
+  // Try network first
+  try {
+    const response = await fetch(event.request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(event.request, response.clone());
+      return response;
+    }
+  } catch (error) {
+    console.error('Fetch failed:', error);
+  }
+
+  // Try cache
+  const cachedResponse = await caches.match(event.request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  // Return offline page for navigation requests
+  if (event.request.mode === 'navigate') {
+    return caches.match('/offline.html') || new Response('Offline');
+  }
+
+  return new Response('Offline content not available', {
+    status: 503,
+    statusText: 'Service Unavailable'
+  });
 }
