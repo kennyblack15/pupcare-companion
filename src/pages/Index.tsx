@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { StatsOverview } from "@/components/dashboard/StatsOverview";
 import { DogProfilesSection } from "@/components/dashboard/DogProfilesSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { AIChatDialog } from "@/components/AIChatDialog";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -68,10 +69,13 @@ const Index = () => {
             <h1 className="text-4xl font-bold text-gray-900">Welcome to PawCare</h1>
             <p className="text-gray-600 mt-2">Manage your pets' health and care in one place</p>
           </div>
-          <Button onClick={() => navigate('/profiles')} className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Dog
-          </Button>
+          <div className="flex gap-4">
+            <AIChatDialog />
+            <Button onClick={() => navigate('/profiles')} className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Dog
+            </Button>
+          </div>
         </div>
 
         <StatsOverview
