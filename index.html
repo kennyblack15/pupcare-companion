@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>PawCare Companion</title>
-    <meta name="description" content="Your complete pet care management solution - Track health records, medications, grooming schedules and more for your beloved pets" />
+    <meta name="description" content="Your complete pet care management solution" />
     <meta name="theme-color" content="#8B5CF6" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -14,19 +14,11 @@
     <meta name="msapplication-TileColor" content="#8B5CF6" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https:;" />
     
-    <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="PawCare Companion" />
-    <meta property="og:description" content="Your complete pet care management solution" />
-    <meta property="og:image" content="https://pawcare.app/og-image.png" />
-    
-    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/png" sizes="196x196" href="/icons/maskable_icon_x192.png" />
     <link rel="apple-touch-icon" href="/icons/maskable_icon_x192.png" />
-    <link rel="apple-touch-startup-image" href="/splash/launch.png" />
-    <link rel="mask-icon" href="/icons/maskable_icon_x512.png" color="#8B5CF6" />
     
     <style>
       :root {
@@ -122,61 +114,16 @@
         }, 2000);
       });
 
-      // Register service worker with background sync support
+      // Register service worker
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', async () => {
-          try {
-            const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-            console.log('ServiceWorker registration successful:', registration);
-            
-            // Request notification permission
-            if ('Notification' in window) {
-              const permission = await Notification.requestPermission();
-              if (permission === 'granted') {
-                const subscription = await registration.pushManager.getSubscription();
-                if (!subscription) {
-                  try {
-                    const response = await fetch('/api/get-vapid-key');
-                    const { data: { vapidPublicKey } } = await response.json();
-                    const newSubscription = await registration.pushManager.subscribe({
-                      userVisibleOnly: true,
-                      applicationServerKey: vapidPublicKey
-                    });
-                    console.log('Push notification subscription successful:', newSubscription);
-                  } catch (err) {
-                    console.error('Push subscription error:', err);
-                  }
-                }
-              }
-            }
-
-            // Set up background sync
-            if ('SyncManager' in window) {
-              // Register sync for any pending offline actions
-              const syncTags = ['sync-medications', 'sync-health-records', 'sync-grooming-tasks'];
-              for (const tag of syncTags) {
-                try {
-                  await registration.sync.register(tag);
-                } catch (err) {
-                  console.error(`Background sync registration failed for ${tag}:`, err);
-                }
-              }
-            }
-          } catch (error) {
-            console.error('ServiceWorker registration failed:', error);
-          }
-        });
-
-        // Handle offline/online status changes
-        window.addEventListener('online', async () => {
-          const registration = await navigator.serviceWorker.ready;
-          if ('SyncManager' in window) {
-            try {
-              await registration.sync.register('sync-all');
-            } catch (err) {
-              console.error('Background sync registration failed:', err);
-            }
-          }
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('ServiceWorker registration successful:', registration);
+            })
+            .catch(error => {
+              console.error('ServiceWorker registration failed:', error);
+            });
         });
       }
     </script>
