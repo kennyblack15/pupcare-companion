@@ -4,6 +4,7 @@
   "id": "pawcare-companion-v1",
   "description": "Your complete pet care management solution - Track health records, medications, grooming schedules and more for your beloved pets",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
@@ -13,6 +14,18 @@
   "dir": "ltr",
   "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://pawcare.app",
+      "id": "pawcare-companion-v1"
+    }
+  ],
+  "scope_extensions": [
+    {
+      "origin": "https://pawcare.app"
+    }
+  ],
   "launch_handler": {
     "client_mode": ["navigate-existing", "auto"]
   },
