@@ -88,34 +88,41 @@
 
       // Register service worker
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', async () => {
-          try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log('ServiceWorker registration successful');
-
-            // Request notification permission and subscribe to push
-            if ('Notification' in window) {
-              const permission = await Notification.requestPermission();
-              if (permission === 'granted') {
-                try {
-                  const { data: { vapidPublicKey }, error: vapidError } = await fetch('/api/get-vapid-key').then(r => r.json());
-                  
-                  if (vapidError) throw new Error('Failed to get VAPID key');
-
-                  const subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: vapidPublicKey
-                  });
-                  
-                  console.log('Push notification subscription successful:', subscription);
-                } catch (error) {
-                  console.error('Error subscribing to push notifications:', error);
-                }
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(registration => {
+              console.log('ServiceWorker registration successful:', registration);
+              
+              // Request notification permission
+              if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                  if (permission === 'granted') {
+                    registration.pushManager.getSubscription().then(subscription => {
+                      if (!subscription) {
+                        fetch('/api/get-vapid-key')
+                          .then(r => r.json())
+                          .then(({ data: { vapidPublicKey } }) => {
+                            registration.pushManager.subscribe({
+                              userVisibleOnly: true,
+                              applicationServerKey: vapidPublicKey
+                            }).then(subscription => {
+                              console.log('Push notification subscription successful:', subscription);
+                            }).catch(err => {
+                              console.error('Push subscription error:', err);
+                            });
+                          })
+                          .catch(err => {
+                            console.error('Error getting VAPID key:', err);
+                          });
+                      }
+                    });
+                  }
+                });
               }
-            }
-          } catch (err) {
-            console.error('ServiceWorker registration failed: ', err);
-          }
+            })
+            .catch(error => {
+              console.error('ServiceWorker registration failed:', error);
+            });
         });
       }
     </script>

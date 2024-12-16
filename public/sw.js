@@ -1,42 +1,59 @@
-/// <reference lib="webworker" />
+const CACHE_NAME = 'pawcare-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
+];
 
-// @ts-ignore
-importScripts('/src/service-worker/cache-manager.ts');
-// @ts-ignore
-importScripts('/src/service-worker/notification-handler.ts');
-// @ts-ignore
-importScripts('/src/service-worker/sync-manager.ts');
-
-// Install event - cache core assets
 self.addEventListener('install', (event) => {
-  event.waitUntil(initializeCache());
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  event.waitUntil(cleanupOldCaches());
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
   self.clients.claim();
 });
 
-// Fetch event - network first, falling back to cache
 self.addEventListener('fetch', (event) => {
-  event.respondWith(handleFetch(event));
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => {
+        return caches.match(event.request);
+      })
+  );
 });
 
-// Push event - handle notifications
 self.addEventListener('push', (event) => {
-  event.waitUntil(handlePushEvent(event));
+  const options = {
+    body: event.data?.text() ?? 'New notification from PawCare',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-72x72.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('PawCare', options)
+  );
 });
 
-// Notification click event
 self.addEventListener('notificationclick', (event) => {
-  event.waitUntil(handleNotificationClick(event));
-});
-
-// Background sync event
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-medications') {
-    event.waitUntil(syncMedications());
-  }
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
+  );
 });
