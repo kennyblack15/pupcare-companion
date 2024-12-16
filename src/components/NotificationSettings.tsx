@@ -3,11 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell } from "lucide-react";
+import { Bell, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function NotificationSettings() {
   const [pushEnabled, setPushEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [permissionDenied, setPermissionDenied] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -16,6 +18,21 @@ export function NotificationSettings() {
 
   const loadNotificationSettings = async () => {
     try {
+      // Check if notifications are supported
+      if (!('Notification' in window)) {
+        setIsLoading(false);
+        setPermissionDenied(true);
+        return;
+      }
+
+      // Check current permission status
+      const permission = await Notification.permission;
+      if (permission === 'denied') {
+        setPermissionDenied(true);
+        setIsLoading(false);
+        return;
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -50,6 +67,7 @@ export function NotificationSettings() {
     }
 
     try {
+      setIsLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -103,6 +121,13 @@ export function NotificationSettings() {
             title: "Notifications enabled",
             description: "You'll now receive medication reminders.",
           });
+        } else if (permission === 'denied') {
+          setPermissionDenied(true);
+          toast({
+            title: "Permission denied",
+            description: "Please enable notifications in your browser settings.",
+            variant: "destructive",
+          });
         }
       } else {
         // Disable notifications
@@ -133,11 +158,28 @@ export function NotificationSettings() {
         description: "Failed to update notification settings.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center p-4 bg-white rounded-lg shadow">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        <span className="ml-2">Loading notification settings...</span>
+      </div>
+    );
+  }
+
+  if (permissionDenied) {
+    return (
+      <Alert variant="destructive">
+        <AlertDescription>
+          Notifications are blocked. Please enable them in your browser settings to receive medication reminders.
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   return (
@@ -156,6 +198,7 @@ export function NotificationSettings() {
       <Switch
         checked={pushEnabled}
         onCheckedChange={toggleNotifications}
+        disabled={isLoading}
       />
     </div>
   );
