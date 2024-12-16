@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Card } from "@/components/ui/card";
 import { PawPrint, Heart, Calendar, MapPin } from "lucide-react";
+import { SubscriptionTiers } from "@/components/SubscriptionTiers";
 
 const DashboardCard = ({ title, icon: Icon, content }: { title: string; icon: any; content: string }) => (
   <Card className="p-6 hover:shadow-lg transition-shadow">
@@ -15,30 +16,37 @@ const DashboardCard = ({ title, icon: Icon, content }: { title: string; icon: an
 const Index = () => {
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-gray-900">Welcome to PawCare</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          <DashboardCard
-            title="Daily Tip"
-            icon={PawPrint}
-            content="Consistency is key in dog training. Maintain regular training sessions of 10-15 minutes daily."
-          />
-          <DashboardCard
-            title="Health Reminder"
-            icon={Heart}
-            content="Next vaccination due in 2 weeks. Schedule your vet appointment today!"
-          />
-          <DashboardCard
-            title="Grooming Schedule"
-            icon={Calendar}
-            content="Upcoming grooming session this weekend. Don't forget to brush daily!"
-          />
-          <DashboardCard
-            title="Nearby Vets"
-            icon={MapPin}
-            content="3 veterinary clinics within 5 miles of your location."
-          />
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div>
+          <h1 className="text-4xl font-bold mb-8 text-gray-900">Welcome to PawCare</h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <DashboardCard
+              title="Daily Tip"
+              icon={PawPrint}
+              content="Consistency is key in dog training. Maintain regular training sessions of 10-15 minutes daily."
+            />
+            <DashboardCard
+              title="Health Reminder"
+              icon={Heart}
+              content="Next vaccination due in 2 weeks. Schedule your vet appointment today!"
+            />
+            <DashboardCard
+              title="Grooming Schedule"
+              icon={Calendar}
+              content="Upcoming grooming session this weekend. Don't forget to brush daily!"
+            />
+            <DashboardCard
+              title="Nearby Vets"
+              icon={MapPin}
+              content="3 veterinary clinics within 5 miles of your location."
+            />
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-3xl font-bold mb-8 text-center">Choose Your Plan</h2>
+          <SubscriptionTiers />
         </div>
       </div>
     </Layout>
