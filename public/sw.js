@@ -4,7 +4,10 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/icons/icon-512x512.png',
+  // Add more static assets to cache
+  '/src/assets/*',
+  '/offline.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -30,6 +33,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Enhanced fetch event handler for better offline support
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
     return;
@@ -41,27 +45,47 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request)
+
+        return fetch(event.request.clone())
           .then(response => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
+
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
               });
+
             return response;
+          })
+          .catch(() => {
+            // Return offline page for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('/offline.html');
+            }
+            // Return default offline response for other requests
+            return new Response('Offline content not available', {
+              status: 503,
+              statusText: 'Service Unavailable',
+              headers: new Headers({
+                'Content-Type': 'text/plain',
+              }),
+            });
           });
       })
   );
 });
 
+// Enhanced background sync for health records
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-health_records') {
     event.waitUntil(syncHealthRecords());
   } else if (event.tag === 'sync-medications') {
     event.waitUntil(syncMedications());
+  } else if (event.tag === 'sync-grooming_tasks') {
+    event.waitUntil(syncGroomingTasks());
   }
 });
 
@@ -103,6 +127,26 @@ async function syncMedications() {
   }
 }
 
+async function syncGroomingTasks() {
+  const tasks = await getUnsyncedGroomingTasks();
+  try {
+    await Promise.all(tasks.map(async task => {
+      const response = await fetch('/api/grooming-tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(task.data)
+      });
+      
+      if (response.ok) {
+        await markAsSynced('grooming_tasks', task.id);
+      }
+    }));
+  } catch (error) {
+    console.error('Error syncing grooming tasks:', error);
+  }
+}
+
+// IndexedDB helper functions
 async function getUnsyncedHealthRecords() {
   const db = await openDB();
   return db.getAll('health_records').filter(record => !record.synced);
@@ -111,6 +155,11 @@ async function getUnsyncedHealthRecords() {
 async function getUnsyncedMedications() {
   const db = await openDB();
   return db.getAll('medications').filter(record => !record.synced);
+}
+
+async function getUnsyncedGroomingTasks() {
+  const db = await openDB();
+  return db.getAll('grooming_tasks').filter(record => !record.synced);
 }
 
 async function markAsSynced(storeName, id) {
@@ -125,8 +174,24 @@ async function markAsSynced(storeName, id) {
 async function openDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open('pawcare-db', 1);
+    
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
+    
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      
+      // Create stores if they don't exist
+      if (!db.objectStoreNames.contains('health_records')) {
+        db.createObjectStore('health_records', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('medications')) {
+        db.createObjectStore('medications', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('grooming_tasks')) {
+        db.createObjectStore('grooming_tasks', { keyPath: 'id' });
+      }
+    };
   });
 }
 
