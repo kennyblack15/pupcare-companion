@@ -8,6 +8,7 @@ const urlsToCache = [
   '/src/assets/*'
 ];
 
+// Install event - cache core assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -16,6 +17,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -31,41 +33,46 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Fetch event - network first, falling back to cache
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        if (response) {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 
-        return fetch(event.request).then(
-          (response) => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
 
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                if (event.request.method === 'GET') {
-                  cache.put(event.request, responseToCache);
-                }
-              });
-
-            return response;
-          }
-        );
+        return response;
       })
       .catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
+        return caches.match(event.request)
+          .then((response) => {
+            if (response) {
+              return response;
+            }
+            
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html');
+            }
+            
+            return new Response('Network error', {
+              status: 408,
+              headers: { 'Content-Type': 'text/plain' },
+            });
+          });
       })
   );
 });
 
+// Push event - handle notifications
 self.addEventListener('push', (event) => {
   console.log('Push notification received:', event);
   
@@ -97,6 +104,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
+// Notification click event
 self.addEventListener('notificationclick', (event) => {
   console.log('Notification clicked:', event);
   
@@ -109,6 +117,7 @@ self.addEventListener('notificationclick', (event) => {
   }
 });
 
+// Background sync event
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-medications') {
     event.waitUntil(syncMedications());
