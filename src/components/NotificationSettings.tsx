@@ -42,6 +42,17 @@ export function NotificationSettings() {
     }
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to manage notifications.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       if (!pushEnabled) {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
@@ -55,6 +66,7 @@ export function NotificationSettings() {
           await supabase
             .from('notification_settings')
             .upsert({
+              user_id: user.id,
               push_enabled: true,
               device_token: JSON.stringify(subscription)
             });
@@ -70,7 +82,7 @@ export function NotificationSettings() {
         await supabase
           .from('notification_settings')
           .update({ push_enabled: false })
-          .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+          .eq('user_id', user.id);
 
         setPushEnabled(false);
         toast({
