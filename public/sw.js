@@ -148,3 +148,39 @@ self.addEventListener('notificationclick', (event) => {
     clients.openWindow('/')
   );
 });
+
+// Add share target handler
+self.addEventListener('fetch', event => {
+  if (event.request.url.endsWith('/share-target') && event.request.method === 'POST') {
+    event.respondWith(
+      (async () => {
+        const formData = await event.request.formData();
+        const mediaFiles = formData.getAll('photos');
+        const text = formData.get('text') || '';
+        const title = formData.get('title') || '';
+        const url = formData.get('url') || '';
+
+        // Store the shared data in IndexedDB for offline access
+        const db = await openDB();
+        const tx = db.transaction('shared_content', 'readwrite');
+        const store = tx.objectStore('shared_content');
+        await store.add({
+          title,
+          text,
+          url,
+          timestamp: new Date().toISOString(),
+          mediaFiles: mediaFiles.length > 0 ? await Promise.all(
+            mediaFiles.map(async file => ({
+              name: file.name,
+              type: file.type,
+              data: await file.arrayBuffer()
+            }))
+          ) : []
+        });
+
+        // Redirect to the main app after handling the share
+        return Response.redirect('/', 303);
+      })()
+    );
+  }
+});

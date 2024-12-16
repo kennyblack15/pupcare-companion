@@ -5,7 +5,7 @@ interface IDBDatabase {
 }
 
 const DB_NAME = 'pawcare-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Increment version to trigger upgrade
 
 export async function initDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -23,6 +23,13 @@ export async function initDB(): Promise<IDBDatabase> {
       
       if (!db.objectStoreNames.contains('medications')) {
         db.createObjectStore('medications', { keyPath: 'id' });
+      }
+
+      if (!db.objectStoreNames.contains('shared_content')) {
+        db.createObjectStore('shared_content', { 
+          keyPath: 'id', 
+          autoIncrement: true 
+        });
       }
     };
   });
