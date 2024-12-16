@@ -57,17 +57,83 @@ export const SidebarContent = React.forwardRef<
 ))
 SidebarContent.displayName = "SidebarContent"
 
-// ... Additional component exports following the same pattern for:
-// SidebarGroup, SidebarGroupLabel, SidebarGroupAction, SidebarGroupContent,
-// SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuAction,
-// SidebarMenuBadge, SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubItem,
-// SidebarMenuSubButton, SidebarSeparator, SidebarInput, SidebarInset,
-// SidebarRail, SidebarTrigger
+export const SidebarGroup = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-sidebar="group"
+    className={cn("flex flex-col gap-2", className)}
+    {...props}
+  />
+))
+SidebarGroup.displayName = "SidebarGroup"
 
-// Export all components
-export {
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
-  // ... export all other components
-}
+export const SidebarGroupLabel = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-sidebar="group-label"
+    className={cn("px-2 text-xs font-semibold text-muted-foreground", className)}
+    {...props}
+  />
+))
+SidebarGroupLabel.displayName = "SidebarGroupLabel"
+
+export const SidebarGroupContent = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-sidebar="group-content"
+    className={cn("flex flex-col gap-1", className)}
+    {...props}
+  />
+))
+SidebarGroupContent.displayName = "SidebarGroupContent"
+
+export const SidebarMenu = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-sidebar="menu"
+    className={cn("flex flex-col gap-1", className)}
+    {...props}
+  />
+))
+SidebarMenu.displayName = "SidebarMenu"
+
+export const SidebarMenuItem = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-sidebar="menu-item"
+    className={cn("flex", className)}
+    {...props}
+  />
+))
+SidebarMenuItem.displayName = "SidebarMenuItem"
+
+export const SidebarMenuButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<"button">
+>(({ className, ...props }, ref) => (
+  <button
+    ref={ref}
+    data-sidebar="menu-button"
+    className={cn(
+      "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+      className
+    )}
+    {...props}
+  />
+))
+SidebarMenuButton.displayName = "SidebarMenuButton"
