@@ -13,37 +13,7 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(urlsToCache))
   );
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-
-        return fetch(event.request).then(
-          (response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
-      })
-  );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -58,21 +28,66 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        if (response) {
+          return response;
+        }
+
+        return fetch(event.request).then(
+          (response) => {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                if (event.request.method === 'GET') {
+                  cache.put(event.request, responseToCache);
+                }
+              });
+
+            return response;
+          }
+        );
+      })
+      .catch(() => {
+        // Return offline fallback for HTML requests
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+      })
+  );
+});
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-medications') {
+    event.waitUntil(syncMedications());
+  }
 });
 
 self.addEventListener('push', (event) => {
+  const data = event.data?.json() ?? {};
   const options = {
-    body: event.data.text(),
+    body: data.body || 'New notification from PawCare',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1
+      primaryKey: 1,
+      url: data.url || '/'
     },
     actions: [
       {
-        action: 'explore',
+        action: 'view',
         title: 'View Details',
       },
       {
@@ -83,16 +98,33 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('PawCare Reminder', options)
+    self.registration.showNotification(data.title || 'PawCare Reminder', options)
   );
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  if (event.action === 'explore') {
+  if (event.action === 'view') {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow(event.notification.data.url)
     );
   }
 });
+
+async function syncMedications() {
+  try {
+    const response = await fetch('/api/sync-medications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Medication sync failed');
+    }
+  } catch (error) {
+    console.error('Background sync failed:', error);
+  }
+}

@@ -30,6 +30,7 @@
         width: 120px;
         height: 120px;
         margin-bottom: 20px;
+        animation: pulse 2s infinite;
       }
       #splash-screen.fade-out {
         opacity: 0;
@@ -39,6 +40,16 @@
         font-size: 24px;
         font-weight: bold;
         margin-top: 16px;
+        animation: fadeIn 1s ease-out;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
     </style>
   </head>
@@ -57,27 +68,30 @@
           setTimeout(() => {
             splashScreen.style.display = 'none';
           }, 300);
-        }, 1000);
+        }, 2000);
       });
 
       // Register service worker
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful');
-              return registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY'
-              });
-            })
-            .then(subscription => {
-              // Store the subscription in your database
-              console.log('Push notification subscription successful:', subscription);
-            })
-            .catch(err => {
-              console.log('ServiceWorker registration failed: ', err);
-            });
+        window.addEventListener('load', async () => {
+          try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('ServiceWorker registration successful');
+
+            // Request notification permission and subscribe to push
+            if ('Notification' in window) {
+              const permission = await Notification.requestPermission();
+              if (permission === 'granted') {
+                const subscription = await registration.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY'
+                });
+                console.log('Push notification subscription successful:', subscription);
+              }
+            }
+          } catch (err) {
+            console.error('ServiceWorker registration failed: ', err);
+          }
         });
       }
     </script>
