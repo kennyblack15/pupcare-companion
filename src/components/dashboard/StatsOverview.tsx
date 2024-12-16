@@ -1,4 +1,4 @@
-import { Dog, HeartPulse, Calendar, Bell } from "lucide-react";
+import { Dog, Calendar, Bell, CheckCircle } from "lucide-react";
 import { StatsCard } from "./StatsCard";
 
 interface StatsOverviewProps {
@@ -8,23 +8,23 @@ interface StatsOverviewProps {
   upcomingEventsCount: number;
 }
 
-export function StatsOverview({ 
-  dogsCount, 
-  healthRecordsCount, 
-  groomingTasksCount, 
-  upcomingEventsCount 
+export function StatsOverview({
+  dogsCount,
+  healthRecordsCount,
+  groomingTasksCount,
+  upcomingEventsCount,
 }: StatsOverviewProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <StatsCard
-        title="Total Pets"
+        title="Total Dogs"
         value={dogsCount}
         icon={Dog}
       />
       <StatsCard
         title="Health Records"
         value={healthRecordsCount}
-        icon={HeartPulse}
+        icon={CheckCircle}
       />
       <StatsCard
         title="Grooming Tasks"
