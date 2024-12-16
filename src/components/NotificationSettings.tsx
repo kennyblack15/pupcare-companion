@@ -67,7 +67,7 @@ export function NotificationSettings() {
           const registration = await navigator.serviceWorker.ready;
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: Deno.env.get('VAPID_PUBLIC_KEY')
+            applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY' // This should be replaced with your actual VAPID public key
           });
 
           // Test notification via Edge Function
