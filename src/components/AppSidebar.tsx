@@ -1,4 +1,5 @@
 import { PawPrint, Heart, Calendar, MapPin, User } from "lucide-react";
+import { useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -12,13 +13,15 @@ import {
 
 const menuItems = [
   { title: "Dashboard", icon: PawPrint, url: "/" },
-  { title: "Health Tracker", icon: Heart, url: "/health" },
+  { title: "Health Records", icon: Heart, url: "/health" },
   { title: "Grooming", icon: Calendar, url: "/grooming" },
   { title: "Vet Directory", icon: MapPin, url: "/vets" },
-  { title: "Dog Profile", icon: User, url: "/profile" },
+  { title: "Dog Profiles", icon: User, url: "/profiles" },
 ];
 
 export function AppSidebar() {
+  const location = useLocation();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -29,10 +32,14 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
+                    <Link 
+                      to={item.url} 
+                      className="flex items-center gap-2"
+                      data-active={location.pathname === item.url}
+                    >
                       <item.icon className="w-5 h-5" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -9,7 +9,188 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      dogs: {
+        Row: {
+          birth_date: string | null
+          breed: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          birth_date?: string | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          birth_date?: string | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dogs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grooming_tasks: {
+        Row: {
+          completed_date: string | null
+          created_at: string
+          dog_id: string
+          due_date: string
+          id: string
+          notes: string | null
+          task_type: string
+        }
+        Insert: {
+          completed_date?: string | null
+          created_at?: string
+          dog_id: string
+          due_date: string
+          id?: string
+          notes?: string | null
+          task_type: string
+        }
+        Update: {
+          completed_date?: string | null
+          created_at?: string
+          dog_id?: string
+          due_date?: string
+          id?: string
+          notes?: string | null
+          task_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grooming_tasks_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      health_records: {
+        Row: {
+          created_at: string
+          description: string | null
+          dog_id: string
+          id: string
+          next_due_date: string | null
+          record_date: string
+          record_type: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dog_id: string
+          id?: string
+          next_due_date?: string | null
+          record_date: string
+          record_type: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dog_id?: string
+          id?: string
+          next_due_date?: string | null
+          record_date?: string
+          record_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_records_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_vets: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          phone: string | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          phone?: string | null
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          phone?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_vets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
