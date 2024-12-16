@@ -6,6 +6,7 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
@@ -14,6 +15,12 @@
   "dir": "ltr",
   "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "prefer_related_applications": false,
+  "protocol_handlers": [
+    {
+      "protocol": "web+pawcare",
+      "url": "/handle-protocol?url=%s"
+    }
+  ],
   "related_applications": [
     {
       "platform": "play",
@@ -49,6 +56,9 @@
         }
       ]
     }
+  },
+  "window_controls_overlay": {
+    "color": "#8B5CF6"
   },
   "icons": [
     {

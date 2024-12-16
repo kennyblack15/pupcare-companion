@@ -14,20 +14,46 @@
     <meta name="msapplication-TileColor" content="#8B5CF6" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="PawCare Companion" />
     <meta property="og:description" content="Your complete pet care management solution" />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image" content="https://pawcare.app/og-image.png" />
     
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
     <link rel="icon" type="image/png" sizes="196x196" href="/icons/maskable_icon_x192.png" />
     <link rel="apple-touch-icon" href="/icons/maskable_icon_x192.png" />
     <link rel="apple-touch-startup-image" href="/splash/launch.png" />
     <link rel="mask-icon" href="/icons/maskable_icon_x512.png" color="#8B5CF6" />
     
     <style>
+      :root {
+        color-scheme: light dark;
+      }
+      
+      @media (display-mode: window-controls-overlay) {
+        body {
+          padding-top: env(titlebar-area-height, 33px);
+        }
+        
+        #titlebar-region {
+          position: fixed;
+          top: 0;
+          left: env(titlebar-area-x, 0);
+          width: env(titlebar-area-width, 100%);
+          height: env(titlebar-area-height, 33px);
+          background: #8B5CF6;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding: 0 1rem;
+          -webkit-app-region: drag;
+          app-region: drag;
+        }
+      }
+      
       #splash-screen {
         position: fixed;
         top: 0;
@@ -70,12 +96,21 @@
     </style>
   </head>
   <body>
+    <div id="titlebar-region">
+      <h1>PawCare</h1>
+    </div>
     <div id="splash-screen">
       <img src="/icons/maskable_icon_x192.png" alt="PawCare" />
       <div class="splash-title">PawCare</div>
     </div>
     <div id="root"></div>
+    
     <script>
+      // Force HTTPS
+      if (location.protocol === 'http:' && location.hostname !== 'localhost') {
+        location.replace(`https:${location.href.substring(location.protocol.length)}`);
+      }
+      
       // Handle splash screen
       window.addEventListener('load', () => {
         setTimeout(() => {
