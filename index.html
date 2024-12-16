@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>PawCare Companion</title>
     <meta name="description" content="Your complete pet care management solution" />
     <meta name="theme-color" content="#8B5CF6" />
@@ -13,9 +14,9 @@
     <meta name="application-name" content="PawCare" />
     
     <!-- Web Manifest -->
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
     
     <style>
       :root {
@@ -89,15 +90,15 @@
       <h1>PawCare</h1>
     </div>
     <div id="splash-screen">
-      <img src="/icons/icon-192x192.png" alt="PawCare" />
+      <img src="icons/icon-192x192.png" alt="PawCare" />
       <div class="splash-title">PawCare</div>
     </div>
     <div id="root"></div>
     
     <script>
-      // Force HTTPS
-      if (location.protocol === 'http:' && location.hostname !== 'localhost') {
-        location.replace(`https:${location.href.substring(location.protocol.length)}`);
+      // Force HTTPS before anything else loads
+      if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+        window.location.href = window.location.href.replace('http:', 'https:');
       }
       
       // Handle splash screen
@@ -114,7 +115,7 @@
       // Register service worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('sw.js', { scope: './' })
             .then(registration => {
               console.log('ServiceWorker registration successful:', registration);
             })

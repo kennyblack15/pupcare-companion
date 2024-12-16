@@ -1,9 +1,24 @@
 importScripts('./service-worker/cache-manager.js');
 importScripts('./service-worker/sync-manager.js');
 
+// Cache name for storing assets
+const CACHE_NAME = 'pawcare-v1';
+
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  event.waitUntil(initCache());
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/icons/icon-192x192.png',
+        '/icons/icon-512x512.png',
+        '/icons/maskable_icon_x192.png',
+        '/icons/maskable_icon_x512.png'
+      ]);
+    })
+  );
   self.skipWaiting();
 });
 
