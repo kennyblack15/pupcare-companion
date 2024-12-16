@@ -11,6 +11,7 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AIChatDialog } from "@/components/AIChatDialog";
 import { MedicationReminders } from "@/components/dashboard/MedicationReminders";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -117,19 +118,21 @@ const Index = () => {
   return (
     <Layout>
       <div className="max-w-7xl mx-auto space-y-8 p-6 animate-fadeIn">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">Welcome to PawCare</h1>
-            <p className="text-gray-600 mt-2">Manage your pets' health and care in one place</p>
+        <Card className="p-6 bg-gradient-to-r from-primary/10 to-primary/5">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Welcome to PawCare</h1>
+              <p className="text-gray-600 mt-2">Manage your pets' health and care in one place</p>
+            </div>
+            <div className="flex gap-4">
+              <AIChatDialog />
+              <Button onClick={() => navigate('/profiles')} className="gap-2 shadow-lg hover:shadow-xl transition-shadow">
+                <Plus className="w-4 h-4" />
+                Add Dog
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <AIChatDialog />
-            <Button onClick={() => navigate('/profiles')} className="gap-2">
-              <Plus className="w-4 h-4" />
-              Add Dog
-            </Button>
-          </div>
-        </div>
+        </Card>
 
         <StatsOverview
           dogsCount={dogs?.length || 0}
@@ -140,7 +143,12 @@ const Index = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold mb-4">Your Dogs</h2>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              Your Dogs
+              <span className="text-sm text-gray-500 font-normal">
+                ({dogs?.length || 0} total)
+              </span>
+            </h2>
             <DogProfilesSection dogs={dogs} isLoading={isLoadingDogs} />
           </section>
 

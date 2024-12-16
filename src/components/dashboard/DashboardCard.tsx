@@ -11,11 +11,11 @@ interface DashboardCardProps {
 export function DashboardCard({ title, icon: Icon, content, onClick }: DashboardCardProps) {
   return (
     <Card 
-      className="p-6 hover:shadow-lg transition-shadow cursor-pointer bg-white" 
+      className="p-6 hover:shadow-lg transition-all duration-300 cursor-pointer bg-white hover:scale-[1.02] active:scale-[0.98]" 
       onClick={onClick}
     >
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-primary/10 rounded-full">
+        <div className="p-3 bg-primary/10 rounded-full">
           <Icon className="w-6 h-6 text-primary" />
         </div>
         <h3 className="text-lg font-semibold">{title}</h3>

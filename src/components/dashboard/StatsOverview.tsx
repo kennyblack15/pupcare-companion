@@ -20,21 +20,25 @@ export function StatsOverview({
         title="Total Dogs"
         value={dogsCount}
         icon={Dog}
+        trend={dogsCount > 0 ? "up" : undefined}
       />
       <StatsCard
         title="Health Records"
         value={healthRecordsCount}
         icon={CheckCircle}
+        trend={healthRecordsCount > 0 ? "up" : undefined}
       />
       <StatsCard
         title="Grooming Tasks"
         value={groomingTasksCount}
         icon={Calendar}
+        trend={groomingTasksCount > 0 ? "up" : undefined}
       />
       <StatsCard
         title="Upcoming Events"
         value={upcomingEventsCount}
         icon={Bell}
+        trend={upcomingEventsCount > 0 ? "up" : undefined}
       />
     </div>
   );
