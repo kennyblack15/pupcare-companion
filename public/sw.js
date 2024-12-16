@@ -59,7 +59,6 @@ self.addEventListener('fetch', (event) => {
         );
       })
       .catch(() => {
-        // Return offline fallback for HTML requests
         if (event.request.mode === 'navigate') {
           return caches.match('/index.html');
         }
@@ -67,16 +66,12 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-medications') {
-    event.waitUntil(syncMedications());
-  }
-});
-
 self.addEventListener('push', (event) => {
+  console.log('Push notification received:', event);
+  
   const data = event.data?.json() ?? {};
   const options = {
-    body: data.body || 'New notification from PawCare',
+    body: data.body || 'Time to take care of your pet!',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
     vibrate: [100, 50, 100],
@@ -103,12 +98,20 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
+  console.log('Notification clicked:', event);
+  
   event.notification.close();
 
   if (event.action === 'view') {
     event.waitUntil(
       clients.openWindow(event.notification.data.url)
     );
+  }
+});
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-medications') {
+    event.waitUntil(syncMedications());
   }
 });
 

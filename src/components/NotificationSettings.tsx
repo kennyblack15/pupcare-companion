@@ -16,9 +16,17 @@ export function NotificationSettings() {
 
   const loadNotificationSettings = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
       const { data: settings } = await supabase
         .from('notification_settings')
         .select('*')
+        .eq('user_id', user.id)
         .single();
       
       if (settings) {
@@ -59,7 +67,18 @@ export function NotificationSettings() {
           const registration = await navigator.serviceWorker.ready;
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY'
+            applicationServerKey: Deno.env.get('VAPID_PUBLIC_KEY')
+          });
+
+          // Test notification via Edge Function
+          await supabase.functions.invoke('send-notification', {
+            body: {
+              subscription,
+              payload: {
+                title: 'Notifications Enabled',
+                body: 'You will now receive medication reminders.',
+              }
+            }
           });
 
           // Save subscription to database
@@ -79,9 +98,18 @@ export function NotificationSettings() {
         }
       } else {
         // Disable notifications
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+          await subscription.unsubscribe();
+        }
+
         await supabase
           .from('notification_settings')
-          .update({ push_enabled: false })
+          .update({ 
+            push_enabled: false,
+            device_token: null
+          })
           .eq('user_id', user.id);
 
         setPushEnabled(false);
