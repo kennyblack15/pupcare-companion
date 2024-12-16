@@ -3,7 +3,7 @@
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
   "id": "/",
-  "start_url": "/",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#8B5CF6",

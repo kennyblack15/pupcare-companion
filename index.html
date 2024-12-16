@@ -84,6 +84,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
+    
   </head>
   <body>
     <div id="titlebar-region">
@@ -96,7 +97,7 @@
     <div id="root"></div>
     
     <script>
-      // Force HTTPS before anything else loads
+      // Force HTTPS
       if (window.location.protocol === 'http:' && !window.location.hostname.includes('localhost')) {
         window.location.href = window.location.href.replace('http:', 'https:');
       }
