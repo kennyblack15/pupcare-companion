@@ -43,12 +43,19 @@ export async function addToSyncQueue(storeName: string, data: any): Promise<void
     const request = store.add(record);
     
     request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      // Request background sync
-      if ('serviceWorker' in navigator && 'sync' in registration) {
-        navigator.serviceWorker.ready.then(registration => {
-          registration.sync.register(`sync-${storeName}`);
-        });
+    request.onsuccess = async () => {
+      // Request background sync if supported
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          if ('sync' in registration) {
+            await (registration as any).sync.register(`sync-${storeName}`);
+          } else {
+            console.warn('Background Sync not supported in this browser');
+          }
+        } catch (error) {
+          console.error('Error registering sync:', error);
+        }
       }
       resolve();
     };
