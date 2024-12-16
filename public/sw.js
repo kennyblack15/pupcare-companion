@@ -26,13 +26,13 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
-        './',
-        './index.html',
-        './manifest.json',
-        './icons/icon-192x192.png',
-        './icons/icon-512x512.png',
-        './icons/maskable_icon_x192.png',
-        './icons/maskable_icon_x512.png'
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/icons/icon-192x192.png',
+        '/icons/icon-512x512.png',
+        '/icons/maskable_icon_x192.png',
+        '/icons/maskable_icon_x512.png'
       ]);
     })
   );
@@ -49,8 +49,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data?.text() ?? 'New notification',
-    icon: './icons/maskable_icon_x192.png',
-    badge: './icons/maskable_icon_x72.png'
+    icon: '/icons/maskable_icon_x192.png',
+    badge: '/icons/maskable_icon_x72.png'
   };
 
   event.waitUntil(
@@ -61,7 +61,7 @@ self.addEventListener('push', (event) => {
 // Notification click event
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(clients.openWindow('./'));
+  event.waitUntil(clients.openWindow('/'));
 });
 
 // Sync event - handle background sync
@@ -78,7 +78,7 @@ async function syncData(storeName) {
   
   for (const record of records) {
     try {
-      const response = await fetch(`./api/${storeName}`, {
+      const response = await fetch(`/api/${storeName}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record.data)

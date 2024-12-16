@@ -14,9 +14,9 @@
     <meta name="application-name" content="PawCare" />
     
     <!-- Web Manifest -->
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
     
     <style>
       :root {
@@ -90,7 +90,7 @@
       <h1>PawCare</h1>
     </div>
     <div id="splash-screen">
-      <img src="icons/icon-192x192.png" alt="PawCare" />
+      <img src="/icons/icon-192x192.png" alt="PawCare" />
       <div class="splash-title">PawCare</div>
     </div>
     <div id="root"></div>
@@ -115,7 +115,7 @@
       // Register service worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js', { scope: './' })
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .then(registration => {
               console.log('ServiceWorker registration successful:', registration);
             })
