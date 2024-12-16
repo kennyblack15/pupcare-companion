@@ -2,7 +2,7 @@
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
-  "id": "/",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
