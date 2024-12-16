@@ -58,7 +58,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-health-records') {
+  if (event.tag === 'sync-health_records') {
     event.waitUntil(syncHealthRecords());
   } else if (event.tag === 'sync-medications') {
     event.waitUntil(syncMedications());
@@ -66,43 +66,68 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncHealthRecords() {
+  const records = await getUnsyncedHealthRecords();
   try {
-    const records = await getUnsyncedHealthRecords();
-    await Promise.all(records.map(record => 
-      fetch('/api/health-records', {
+    await Promise.all(records.map(async record => {
+      const response = await fetch('/api/health-records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(record)
-      })
-    ));
+        body: JSON.stringify(record.data)
+      });
+      
+      if (response.ok) {
+        await markAsSynced('health_records', record.id);
+      }
+    }));
   } catch (error) {
     console.error('Error syncing health records:', error);
   }
 }
 
 async function syncMedications() {
+  const medications = await getUnsyncedMedications();
   try {
-    const medications = await getUnsyncedMedications();
-    await Promise.all(medications.map(medication => 
-      fetch('/api/medications', {
+    await Promise.all(medications.map(async medication => {
+      const response = await fetch('/api/medications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(medication)
-      })
-    ));
+        body: JSON.stringify(medication.data)
+      });
+      
+      if (response.ok) {
+        await markAsSynced('medications', medication.id);
+      }
+    }));
   } catch (error) {
     console.error('Error syncing medications:', error);
   }
 }
 
 async function getUnsyncedHealthRecords() {
-  // Implementation will be added when IndexedDB is set up
-  return [];
+  const db = await openDB();
+  return db.getAll('health_records').filter(record => !record.synced);
 }
 
 async function getUnsyncedMedications() {
-  // Implementation will be added when IndexedDB is set up
-  return [];
+  const db = await openDB();
+  return db.getAll('medications').filter(record => !record.synced);
+}
+
+async function markAsSynced(storeName, id) {
+  const db = await openDB();
+  const tx = db.transaction(storeName, 'readwrite');
+  const store = tx.objectStore(storeName);
+  const record = await store.get(id);
+  record.synced = true;
+  await store.put(record);
+}
+
+async function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('pawcare-db', 1);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+  });
 }
 
 self.addEventListener('push', (event) => {
