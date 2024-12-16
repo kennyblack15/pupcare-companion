@@ -82,11 +82,7 @@
             if ('Notification' in window) {
               const permission = await Notification.requestPermission();
               if (permission === 'granted') {
-                const subscription = await registration.pushManager.subscribe({
-                  userVisibleOnly: true,
-                  applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY'
-                });
-                console.log('Push notification subscription successful:', subscription);
+                console.log('Notification permission granted');
               }
             }
           } catch (err) {
