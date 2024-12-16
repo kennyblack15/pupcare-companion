@@ -126,6 +126,53 @@ export type Database = {
           },
         ]
       }
+      medications: {
+        Row: {
+          created_at: string
+          dog_id: string
+          dosage: string | null
+          end_date: string | null
+          frequency: string
+          id: string
+          name: string
+          notes: string | null
+          start_date: string
+          time_of_day: string[]
+        }
+        Insert: {
+          created_at?: string
+          dog_id: string
+          dosage?: string | null
+          end_date?: string | null
+          frequency: string
+          id?: string
+          name: string
+          notes?: string | null
+          start_date: string
+          time_of_day: string[]
+        }
+        Update: {
+          created_at?: string
+          dog_id?: string
+          dosage?: string | null
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          start_date?: string
+          time_of_day?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

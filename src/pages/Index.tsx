@@ -9,6 +9,7 @@ import { StatsOverview } from "@/components/dashboard/StatsOverview";
 import { DogProfilesSection } from "@/components/dashboard/DogProfilesSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AIChatDialog } from "@/components/AIChatDialog";
+import { MedicationReminders } from "@/components/dashboard/MedicationReminders";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -85,10 +86,17 @@ const Index = () => {
           upcomingEventsCount={upcomingEventsCount}
         />
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold mb-4">Your Dogs</h2>
-          <DogProfilesSection dogs={dogs} isLoading={isLoading} />
-        </section>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold mb-4">Your Dogs</h2>
+            <DogProfilesSection dogs={dogs} isLoading={isLoading} />
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold mb-4">Medication Reminders</h2>
+            <MedicationReminders />
+          </section>
+        </div>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
