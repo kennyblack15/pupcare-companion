@@ -11,15 +11,69 @@
     <meta name="apple-mobile-web-app-title" content="PawCare" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <style>
+      #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #8B5CF6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
+      }
+      #splash-screen img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+      }
+      #splash-screen.fade-out {
+        opacity: 0;
+      }
+      .splash-title {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 16px;
+      }
+    </style>
   </head>
   <body>
+    <div id="splash-screen">
+      <img src="/icons/icon-192x192.png" alt="PawCare" />
+      <div class="splash-title">PawCare</div>
+    </div>
     <div id="root"></div>
     <script>
+      // Handle splash screen
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const splashScreen = document.getElementById('splash-screen');
+          splashScreen.classList.add('fade-out');
+          setTimeout(() => {
+            splashScreen.style.display = 'none';
+          }, 300);
+        }, 1000);
+      });
+
+      // Register service worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
             .then(registration => {
               console.log('ServiceWorker registration successful');
+              return registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY'
+              });
+            })
+            .then(subscription => {
+              // Store the subscription in your database
+              console.log('Push notification subscription successful:', subscription);
             })
             .catch(err => {
               console.log('ServiceWorker registration failed: ', err);

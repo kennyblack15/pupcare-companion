@@ -10,8 +10,11 @@ import { DogProfilesSection } from "@/components/dashboard/DogProfilesSection";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { AIChatDialog } from "@/components/AIChatDialog";
 import { MedicationReminders } from "@/components/dashboard/MedicationReminders";
+import { NotificationSettings } from "@/components/NotificationSettings";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
+
+// ... keep existing code (imports and component setup)
 
 const Index = () => {
   const navigate = useNavigate();
@@ -162,6 +165,7 @@ const Index = () => {
           <section className="space-y-4">
             <h2 className="text-xl md:text-2xl font-semibold mb-4">Medication Reminders</h2>
             <MedicationReminders />
+            <NotificationSettings />
           </section>
         </div>
 
