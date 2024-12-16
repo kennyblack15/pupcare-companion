@@ -1,9 +1,5 @@
 /// <reference lib="webworker" />
-
-interface SyncEvent extends Event {
-  tag: string;
-  waitUntil(promise: Promise<any>): void;
-}
+import { type SyncEvent } from '../types/service-worker';
 
 export async function syncMedications(): Promise<void> {
   try {
