@@ -16,6 +16,15 @@ const STATIC_ASSETS = [
   'https://pupcare-companion.lovable.app/icons/icon-512x512.png'
 ];
 
+// Dynamic routes to cache
+const DYNAMIC_ROUTES = [
+  '/health',
+  '/medications',
+  '/grooming',
+  '/profiles',
+  '/vets'
+];
+
 // Force HTTPS
 self.addEventListener('fetch', (event) => {
   // Check if the request is for HTTP
@@ -37,7 +46,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll([...STATIC_ASSETS, ...DYNAMIC_ROUTES]);
     })
   );
   self.skipWaiting();
@@ -130,10 +139,9 @@ async function updateAppContent() {
       })
     );
 
-    // Update dynamic content
-    const dynamicRoutes = ['/', '/health', '/medications', '/grooming'];
+    // Update dynamic routes
     await Promise.all(
-      dynamicRoutes.map(async (route) => {
+      DYNAMIC_ROUTES.map(async (route) => {
         try {
           const response = await fetch(route, { cache: 'no-cache' });
           if (response.ok) {
@@ -171,7 +179,7 @@ async function handleFetch(event) {
 
   // Return offline page for navigation requests
   if (event.request.mode === 'navigate') {
-    return caches.match('/offline.html') || new Response('Offline');
+    return caches.match('/offline.html');
   }
 
   return new Response('Offline content not available', {
