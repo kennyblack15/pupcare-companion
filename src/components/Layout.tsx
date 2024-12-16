@@ -1,15 +1,20 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
+import { Logo } from "./Logo";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export function Layout({ children }: LayoutProps) {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-purple-50 via-white to-blue-50 animate-gradient">
-        <AppSidebar />
-        <main className="flex-1 animate-fadeIn overflow-auto">
-          {children}
-        </main>
-      </div>
-    </SidebarProvider>
+    <div className="min-h-screen flex">
+      <AppSidebar />
+      <main className="flex-1 relative">
+        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b p-4">
+          <Logo />
+        </header>
+        {children}
+      </main>
+    </div>
   );
 }
