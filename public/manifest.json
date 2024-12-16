@@ -16,6 +16,11 @@
   "prefer_related_applications": false,
   "related_applications": [
     {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=app.pawcare.companion",
+      "id": "app.pawcare.companion"
+    },
+    {
       "platform": "webapp",
       "url": "https://pawcare.app",
       "id": "pawcare-companion-v1"
