@@ -89,3 +89,23 @@ class SyncManager {
 }
 
 const syncManager = new SyncManager();
+
+async function syncData(storeName) {
+  const records = await syncManager.getUnsynced(storeName);
+  
+  for (const record of records) {
+    try {
+      const response = await fetch(`/api/${storeName}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record.data)
+      });
+
+      if (response.ok) {
+        await syncManager.markSynced(storeName, record.id);
+      }
+    } catch (error) {
+      console.error(`Sync failed for ${storeName}:`, error);
+    }
+  }
+}

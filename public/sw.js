@@ -2,29 +2,6 @@ importScripts('./service-worker/cache-manager.js');
 importScripts('./service-worker/sync-manager.js');
 importScripts('./service-worker/notification-handler.js');
 
-// Cache name for storing assets
-const CACHE_NAME = 'pawcare-v1';
-const PERIODIC_SYNC_TAG = 'periodic-sync';
-
-// Assets to cache
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/offline.html',
-  'https://pupcare-companion.lovable.app/icons/icon-192x192.png',
-  'https://pupcare-companion.lovable.app/icons/icon-512x512.png'
-];
-
-// Dynamic routes to cache
-const DYNAMIC_ROUTES = [
-  '/health',
-  '/medications',
-  '/grooming',
-  '/profiles',
-  '/vets'
-];
-
 // Force HTTPS
 self.addEventListener('fetch', (event) => {
   // Check if the request is for HTTP
@@ -44,11 +21,7 @@ self.addEventListener('fetch', (event) => {
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([...STATIC_ASSETS, ...DYNAMIC_ROUTES]);
-    })
-  );
+  event.waitUntil(initCache());
   self.skipWaiting();
 });
 
@@ -61,7 +34,7 @@ self.addEventListener('activate', (event) => {
       (async () => {
         if ('periodicSync' in self.registration) {
           try {
-            await self.registration.periodicSync.register(PERIODIC_SYNC_TAG, {
+            await self.registration.periodicSync.register('sync-content', {
               minInterval: 24 * 60 * 60 * 1000 // 24 hours
             });
           } catch (error) {
@@ -82,13 +55,6 @@ self.addEventListener('sync', (event) => {
   }
 });
 
-// Periodic background sync event
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === PERIODIC_SYNC_TAG) {
-    event.waitUntil(updateAppContent());
-  }
-});
-
 // Push notification event
 self.addEventListener('push', (event) => {
   event.waitUntil(handlePushEvent(event));
@@ -98,92 +64,3 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.waitUntil(handleNotificationClick(event));
 });
-
-// Helper function to sync data
-async function syncData(storeName) {
-  const records = await syncManager.getUnsynced(storeName);
-  
-  for (const record of records) {
-    try {
-      const response = await fetch(`/api/${storeName}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(record.data)
-      });
-
-      if (response.ok) {
-        await syncManager.markSynced(storeName, record.id);
-      }
-    } catch (error) {
-      console.error(`Sync failed for ${storeName}:`, error);
-    }
-  }
-}
-
-// Helper function to update app content
-async function updateAppContent() {
-  try {
-    const cache = await caches.open(CACHE_NAME);
-    
-    // Update static assets
-    await Promise.all(
-      STATIC_ASSETS.map(async (url) => {
-        try {
-          const response = await fetch(url, { cache: 'no-cache' });
-          if (response.ok) {
-            await cache.put(url, response);
-          }
-        } catch (error) {
-          console.error(`Failed to update ${url}:`, error);
-        }
-      })
-    );
-
-    // Update dynamic routes
-    await Promise.all(
-      DYNAMIC_ROUTES.map(async (route) => {
-        try {
-          const response = await fetch(route, { cache: 'no-cache' });
-          if (response.ok) {
-            await cache.put(route, response);
-          }
-        } catch (error) {
-          console.error(`Failed to update ${route}:`, error);
-        }
-      })
-    );
-  } catch (error) {
-    console.error('Failed to update app content:', error);
-  }
-}
-
-// Helper function to handle fetch events
-async function handleFetch(event) {
-  // Try network first
-  try {
-    const response = await fetch(event.request);
-    if (response.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(event.request, response.clone());
-      return response;
-    }
-  } catch (error) {
-    console.error('Fetch failed:', error);
-  }
-
-  // Try cache
-  const cachedResponse = await caches.match(event.request);
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  // Return offline page for navigation requests
-  if (event.request.mode === 'navigate') {
-    return caches.match('/offline.html');
-  }
-
-  return new Response('Offline content not available', {
-    status: 503,
-    statusText: 'Service Unavailable'
-  });
-}
