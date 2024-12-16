@@ -1,12 +1,14 @@
 export interface SyncEvent extends Event {
   tag: string;
-  waitUntil(promise: Promise<any>): void;
+  waitUntil(promise: Promise<void>): void;
+}
+
+export interface SyncManager {
+  register(tag: string): Promise<void>;
 }
 
 export interface ServiceWorkerRegistrationWithSync extends ServiceWorkerRegistration {
-  sync: {
-    register(tag: string): Promise<void>;
-  };
+  sync: SyncManager;
 }
 
 export interface SyncableRecord {

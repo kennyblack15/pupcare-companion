@@ -1,4 +1,8 @@
-import { type IDBDatabase } from './db-types';
+interface IDBDatabase {
+  objectStoreNames: DOMStringList;
+  createObjectStore(name: string, options?: IDBObjectStoreParameters): IDBObjectStore;
+  transaction(storeNames: string | string[], mode?: IDBTransactionMode): IDBTransaction;
+}
 
 const DB_NAME = 'pawcare-db';
 const DB_VERSION = 1;
