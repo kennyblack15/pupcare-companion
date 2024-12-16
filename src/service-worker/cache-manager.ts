@@ -1,64 +1,55 @@
-/// <reference lib="webworker" />
-
 const CACHE_NAME = 'pawcare-v1';
-const urlsToCache = [
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/src/assets/*'
+  '/offline.html',
+  '/icons/maskable_icon_x192.png',
+  '/icons/maskable_icon_x512.png'
 ];
 
-export async function initializeCache(): Promise<void> {
+export async function initCache(): Promise<void> {
   const cache = await caches.open(CACHE_NAME);
-  await cache.addAll(urlsToCache);
+  await cache.addAll(STATIC_ASSETS);
 }
 
 export async function cleanupOldCaches(): Promise<void> {
-  const cacheNames = await caches.keys();
+  const cacheKeys = await caches.keys();
   await Promise.all(
-    cacheNames.map(async (cacheName) => {
-      if (cacheName !== CACHE_NAME) {
-        await caches.delete(cacheName);
+    cacheKeys.map(key => {
+      if (key !== CACHE_NAME) {
+        return caches.delete(key);
       }
     })
   );
 }
 
 export async function handleFetch(event: FetchEvent): Promise<Response> {
-  if (event.request.method !== 'GET') {
-    return fetch(event.request);
-  }
-
+  // Network first, falling back to cache
   try {
     const response = await fetch(event.request);
-    if (!response || response.status !== 200 || response.type !== 'basic') {
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(event.request, response.clone());
       return response;
     }
-
-    const responseToCache = response.clone();
-    const cache = await caches.open(CACHE_NAME);
-    await cache.put(event.request, responseToCache);
-
-    return response;
   } catch (error) {
-    const cachedResponse = await caches.match(event.request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    if (event.request.mode === 'navigate') {
-      const indexResponse = await caches.match('/index.html');
-      return indexResponse || new Response('Network error', {
-        status: 408,
-        headers: { 'Content-Type': 'text/plain' },
-      });
-    }
-    
-    return new Response('Network error', {
-      status: 408,
-      headers: { 'Content-Type': 'text/plain' },
-    });
+    console.error('Fetch failed:', error);
   }
+
+  // Try cache
+  const cachedResponse = await caches.match(event.request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  // Return offline page for navigation requests
+  if (event.request.mode === 'navigate') {
+    return caches.match('/offline.html') || new Response('Offline');
+  }
+
+  return new Response('Offline content not available', {
+    status: 503,
+    statusText: 'Service Unavailable'
+  });
 }
