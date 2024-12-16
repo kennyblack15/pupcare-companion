@@ -9,6 +9,7 @@ import { MedicationReminders } from "@/components/dashboard/MedicationReminders"
 import { NotificationSettings } from "@/components/NotificationSettings";
 import { WelcomeCard } from "@/components/dashboard/WelcomeCard";
 import { LoadingDashboard } from "@/components/dashboard/LoadingDashboard";
+import { ScreenshotHelper } from "@/components/screenshots/ScreenshotHelper";
 
 const Index = () => {
   const { toast } = useToast();
@@ -119,6 +120,7 @@ const Index = () => {
           <QuickActions />
         </section>
       </div>
+      {import.meta.env.DEV && <ScreenshotHelper />}
     </Layout>
   );
 };
