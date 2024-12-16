@@ -1,4 +1,4 @@
-import { PawPrint, Heart, Calendar, MapPin, User } from "lucide-react";
+import { Dog, Heart, Calendar, MapPin, User, Home } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
@@ -12,11 +12,12 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Dashboard", icon: PawPrint, url: "/" },
+  { title: "Dashboard", icon: Home, url: "/" },
+  { title: "Dog Profiles", icon: Dog, url: "/profiles" },
   { title: "Health Records", icon: Heart, url: "/health" },
   { title: "Grooming", icon: Calendar, url: "/grooming" },
   { title: "Vet Directory", icon: MapPin, url: "/vets" },
-  { title: "Dog Profiles", icon: User, url: "/profiles" },
+  { title: "My Account", icon: User, url: "/account" },
 ];
 
 export function AppSidebar() {
@@ -26,7 +27,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>PawCare</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <span className="flex items-center gap-2">
+              <Dog className="w-6 h-6" />
+              PawCare
+            </span>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (

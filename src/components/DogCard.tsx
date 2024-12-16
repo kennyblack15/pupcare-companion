@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PawPrint } from "lucide-react";
+import { Dog } from "lucide-react";
 
 interface DogCardProps {
   dog: {
@@ -16,10 +16,10 @@ export function DogCard({ dog }: DogCardProps) {
     : null;
 
   return (
-    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+    <Card className="hover:shadow-lg transition-shadow cursor-pointer bg-white">
       <CardHeader className="flex flex-row items-center gap-4 pb-2">
         <div className="p-2 bg-primary/10 rounded-full">
-          <PawPrint className="w-6 h-6 text-primary" />
+          <Dog className="w-6 h-6 text-primary" />
         </div>
         <div>
           <h3 className="text-xl font-semibold">{dog.name}</h3>
