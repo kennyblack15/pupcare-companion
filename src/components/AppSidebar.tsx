@@ -8,7 +8,6 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
 } from "@/components/ui/sidebar";
 
 const menuItems = [
@@ -39,7 +38,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <Link 
                     to={item.url} 
-                    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground"
                     data-active={location.pathname === item.url}
                   >
                     <item.icon className="w-5 h-5" />

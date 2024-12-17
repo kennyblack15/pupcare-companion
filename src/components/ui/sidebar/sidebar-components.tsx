@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { PanelLeft } from "lucide-react"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "./sidebar-context"
-import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_MOBILE, SIDEBAR_WIDTH_ICON } from "./sidebar-provider"
 
 export const SidebarHeader = React.forwardRef<
   HTMLDivElement,
@@ -121,19 +119,3 @@ export const SidebarMenuItem = React.forwardRef<
   />
 ))
 SidebarMenuItem.displayName = "SidebarMenuItem"
-
-export const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<"button">
->(({ className, ...props }, ref) => (
-  <button
-    ref={ref}
-    data-sidebar="menu-button"
-    className={cn(
-      "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-      className
-    )}
-    {...props}
-  />
-))
-SidebarMenuButton.displayName = "SidebarMenuButton"
