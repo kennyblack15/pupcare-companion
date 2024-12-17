@@ -1,78 +1,73 @@
-import { Layout } from "@/components/Layout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
-
-const STORAGE_URL = "https://uxbfgennjhmsoglrcuwl.supabase.co/storage/v1/object/public/avatars";
+import { LogOut } from "lucide-react";
+import { ProfileAvatar } from "@/components/account/ProfileAvatar";
+import { ProfileForm } from "@/components/account/ProfileForm";
+import { AvatarUpload } from "@/components/account/AvatarUpload";
 
 const Account = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
   const [fullName, setFullName] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    getProfile();
+    checkUser();
+    fetchProfile();
   }, []);
 
-  const getProfile = async () => {
+  const checkUser = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate('/login');
+    }
+  };
+
+  const fetchProfile = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate('/login');
-        return;
-      }
+      if (!session?.user) return;
 
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('full_name, avatar_url')
         .eq('id', session.user.id)
         .single();
 
       if (error) throw error;
 
-      if (data) {
-        setFullName(data.full_name || '');
-        setAvatarUrl(data.avatar_url || '');
-      }
+      setFullName(data.full_name || '');
+      setAvatarUrl(data.avatar_url);
     } catch (error) {
-      console.error('Error loading profile:', error);
       toast({
-        title: "Error loading profile",
+        title: "Error fetching profile",
         description: "Please try again later.",
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const updateProfile = async () => {
+  const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsUpdating(true);
+
     try {
-      setLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate('/login');
-        return;
-      }
+      if (!session?.user) return;
 
       const { error } = await supabase
         .from('profiles')
-        .update({
-          full_name: fullName,
-          updated_at: new Date().toISOString(),
-        })
+        .update({ full_name: fullName })
         .eq('id', session.user.id);
 
       if (error) throw error;
@@ -82,59 +77,55 @@ const Account = () => {
         description: "Your profile has been updated successfully.",
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
       toast({
         title: "Error updating profile",
         description: "Please try again later.",
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsUpdating(false);
     }
   };
 
-  const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setUploading(true);
-      
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
-      }
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
 
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${Math.random()}.${fileExt}`;
+    setIsUploading(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file);
+        .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: filePath })
+        .update({ avatar_url: fileName })
         .eq('id', session.user.id);
 
       if (updateError) throw updateError;
 
-      setAvatarUrl(filePath);
+      setAvatarUrl(fileName);
       toast({
         title: "Avatar updated",
-        description: "Your avatar has been updated successfully.",
+        description: "Your profile picture has been updated successfully.",
       });
     } catch (error) {
-      console.error('Error uploading avatar:', error);
       toast({
         title: "Error uploading avatar",
         description: "Please try again later.",
         variant: "destructive",
       });
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   };
 
@@ -142,9 +133,8 @@ const Account = () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      navigate('/');
+      navigate('/login');
     } catch (error) {
-      console.error('Error signing out:', error);
       toast({
         title: "Error signing out",
         description: "Please try again later.",
@@ -153,11 +143,11 @@ const Account = () => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <Loader2 className="w-8 h-8 animate-spin" />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-pulse text-center">Loading profile...</div>
         </div>
       </Layout>
     );
@@ -166,75 +156,37 @@ const Account = () => {
   return (
     <Layout>
       <div className="max-w-2xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
-        
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-col items-center space-y-4">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage 
-                    src={avatarUrl ? `${STORAGE_URL}/${avatarUrl}` : undefined} 
-                    alt="Profile" 
-                  />
-                  <AvatarFallback>{fullName?.charAt(0) || '?'}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <Label htmlFor="avatar" className="cursor-pointer">
-                    <Button variant="outline" disabled={uploading}>
-                      {uploading ? 'Uploading...' : 'Change Avatar'}
-                    </Button>
-                    <Input
-                      id="avatar"
-                      type="file"
-                      accept="image/*"
-                      onChange={uploadAvatar}
-                      disabled={uploading}
-                      className="hidden"
-                    />
-                  </Label>
-                </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex flex-col items-center space-y-4">
+              <ProfileAvatar avatarUrl={avatarUrl || undefined} fullName={fullName} />
+              <AvatarUpload isUploading={isUploading} onFileChange={handleAvatarChange} />
+            </div>
+
+            <div className="space-y-6">
+              <ProfileForm
+                fullName={fullName}
+                isUpdating={isUpdating}
+                onFullNameChange={(e) => setFullName(e.target.value)}
+                onSubmit={handleProfileUpdate}
+              />
+
+              <div className="pt-4 border-t">
+                <Button
+                  variant="destructive"
+                  onClick={handleSignOut}
+                  className="w-full sm:w-auto"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Enter your full name"
-                />
-              </div>
-
-              <Button 
-                onClick={updateProfile} 
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? 'Saving...' : 'Save Changes'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Button 
-                variant="destructive" 
-                onClick={handleSignOut}
-                className="w-full"
-              >
-                Sign Out
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </Layout>
   );
