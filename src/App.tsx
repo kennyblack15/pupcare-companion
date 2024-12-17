@@ -12,6 +12,7 @@ import Health from "./pages/Health";
 import Training from "./pages/Training";
 import Grooming from "./pages/Grooming";
 import Vets from "./pages/Vets";
+import Account from "./pages/Account";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/training" element={<Training />} />
               <Route path="/grooming" element={<Grooming />} />
               <Route path="/vets" element={<Vets />} />
+              <Route path="/account" element={<Account />} />
             </Routes>
           </BrowserRouter>
         </Suspense>
