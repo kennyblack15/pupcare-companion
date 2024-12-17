@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
+const STORAGE_URL = "https://uxbfgennjhmsoglrcuwl.supabase.co/storage/v1/object/public/avatars";
+
 const Account = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -175,7 +177,7 @@ const Account = () => {
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="w-24 h-24">
                   <AvatarImage 
-                    src={avatarUrl ? `${supabase.storageUrl}/object/public/avatars/${avatarUrl}` : undefined} 
+                    src={avatarUrl ? `${STORAGE_URL}/${avatarUrl}` : undefined} 
                     alt="Profile" 
                   />
                   <AvatarFallback>{fullName?.charAt(0) || '?'}</AvatarFallback>
