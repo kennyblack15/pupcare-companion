@@ -1,3 +1,4 @@
+Fixed manifest.json JSON structure
 {"icons": [Updated manifest.json with absolute icon URLs{
   "name": "PawCare Companion",
   "short_name": "PawCare",
