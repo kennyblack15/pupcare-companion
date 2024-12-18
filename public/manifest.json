@@ -1,4 +1,25 @@
-{
+{"icons": [Updated manifest.json with absolute icon URLs
+
+  {
+    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/maskable_icon_x192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
+]
+
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
