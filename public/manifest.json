@@ -1,5 +1,4 @@
-Fixed manifest.json JSON structure
-{"icons": [Updated manifest.json with absolute icon URLs{
+{
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
@@ -10,10 +9,7 @@ Fixed manifest.json JSON structure
   "orientation": "portrait",
   "id": "/",
   "scope": "/",
-  "categories": [
-    "lifestyle",
-    "health"
-  ],
+  "categories": ["lifestyle", "health"],
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
@@ -33,146 +29,17 @@ Fixed manifest.json JSON structure
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
-}
-
-
-  {
-    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/maskable_icon_x192.png",
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "maskable"
-  }
-]
-
-  "name": "PawCare Companion",
-  "short_name": "PawCare",
-  "description": "Your complete pet care management solution",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#8B5CF6",
-  "theme_color": "#8B5CF6",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/maskable_icon_x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/maskable_icon_x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/home-light.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Home screen in light mode"
     },
     {
-      "src": "/screenshots/home-dark.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
@@ -183,12 +50,23 @@ Fixed manifest.json JSON structure
     {
       "name": "Add Dog Profile",
       "url": "/profiles",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Health Records",
       "url": "/health",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }
+
