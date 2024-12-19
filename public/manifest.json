@@ -1,13 +1,13 @@
 {
   "name": "PawCare Companion",
   "short_name": "PawCare",
-  "description": "Your complete pet care management solution",
+  "description": "Your complete pet care management solution for tracking pet health and activities.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
-  "id": "/",
+  "id": "pawcare-companion",
   "scope": "/",
   "categories": ["lifestyle", "health", "productivity"],
   "icons": [
@@ -60,7 +60,11 @@
         }
       ]
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-new"
+  }
 }
+
 
   
