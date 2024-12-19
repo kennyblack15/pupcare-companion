@@ -1,95 +1,45 @@
 {
   "name": "PawCare Companion",
   "short_name": "PawCare",
-  "description": "PawCare Companion is a complete pet care management solution for tracking pet health, activities, and records.",
-  "start_url": "/",
+  "description": "Your complete pet care management solution",
+  "start_url": "./",
   "display": "standalone",
-  "display_override": ["standalone", "window-controls-overlay"],
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
-  "id": "/pawcare-companion",
+  "id": "/",
   "scope": "/",
-  "categories": ["lifestyle", "health", "productivity"],
-  "dir": "ltr",
-  "lang": "en-US",
-  "iarc_rating_id": "E",
-  "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
+  "categories": ["lifestyle", "health"],
   "icons": [
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/maskable_icon_x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/maskable_icon_x192.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/maskable_icon_x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/maskable_icon_x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/maskable_icon_x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/maskable_icon_x72.png",
-      "sizes": "72x72",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/home-light.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Home screen in light mode"
     },
     {
-      "src": "/screenshots/home-dark.png",
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
@@ -102,7 +52,7 @@
       "url": "/profiles",
       "icons": [
         {
-          "src": "/icons/icon-96x96.png",
+          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -112,44 +62,10 @@
       "url": "/health",
       "icons": [
         {
-          "src": "/icons/icon-96x96.png",
+          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     }
-  ],
-  "widgets": [
-    {
-      "name": "Dog Care Reminder",
-      "tag": "dogcare",
-      "description": "Quick access to your pet's care schedule",
-      "screenshots": [
-        {
-          "src": "/screenshots/widget-light.png",
-          "type": "image/png",
-          "sizes": "400x300"
-        }
-      ],
-      "shortcuts": [
-        {
-          "name": "Add medication",
-          "url": "/medications/add"
-        }
-      ]
-    }
-  ],
-  "background_sync": {
-    "periodic": true,
-    "min_period": 86400,
-    "max_retries": 3
-  },
-  "launch_handler": {
-    "client_mode": "navigate-new"
-  },
-  "serviceworker": {
-    "src": "/sw.js",
-    "scope": "/",
-    "type": "classic",
-    "update_via_cache": "none"
-  }
+  ]
 }
