@@ -16,29 +16,44 @@
   "iarc_rating_id": "E",
   "icons": [
     {
-      "src": "https://your-secure-host/icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://your-secure-host/icons/icon-192x192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
       "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "https://your-secure-host/screenshots/home-light.png",
+      "src": "/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Home screen"
+      "label": "Home screen in light mode"
     },
     {
-      "src": "https://your-secure-host/screenshots/home-dark.png",
+      "src": "/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Dark mode home screen"
+      "label": "Home screen in dark mode"
     }
   ],
   "shortcuts": [
@@ -47,7 +62,7 @@
       "url": "/profiles",
       "icons": [
         {
-          "src": "https://your-secure-host/icons/icon-96x96.png",
+          "src": "/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -57,7 +72,7 @@
       "url": "/health",
       "icons": [
         {
-          "src": "https://your-secure-host/icons/icon-96x96.png",
+          "src": "/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -95,7 +110,7 @@
       "url": "/widget-dog-care",
       "icons": [
         {
-          "src": "https://your-secure-host/icons/widget-icon.png",
+          "src": "/icons/widget-icon.png",
           "sizes": "128x128"
         }
       ]
@@ -115,5 +130,3 @@
     }
   ]
 }
-
-
