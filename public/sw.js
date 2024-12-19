@@ -18,7 +18,7 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache);
     })
   );
-  self.skipWaiting();
+  self.skipWaiting(); // Activate service worker immediately
 });
 
 // Activate Event - Cleanup Old Caches
@@ -35,7 +35,7 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
-  self.clients.claim();
+  self.clients.claim(); // Claim the client immediately
 });
 
 // Fetch Event - Serve Cached Files or Fetch Online
