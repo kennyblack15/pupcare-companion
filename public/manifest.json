@@ -63,7 +63,8 @@
     {
       "name": "Health Records",
       "url": "/health",
-      "icons": [
+      "icons": [Fixed icon URL in manifest.json
+
         {
           "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
           "sizes": "96x96"
