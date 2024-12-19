@@ -1,5 +1,6 @@
 // Service Worker for PawCare Companion
-const CACHE_NAME = "pawcare-cache-v1";
+const CACHE_NAME = "pawcare-cache-v2";
+const OFFLINE_URL = "/pupcare-companion/offline.html";
 const urlsToCache = [
   "/pupcare-companion/",
   "/pupcare-companion/index.html",
@@ -7,7 +8,8 @@ const urlsToCache = [
   "/pupcare-companion/icons/icon-512x512.png",
   "/pupcare-companion/icons/maskable_icon_x192.png",
   "/pupcare-companion/screenshots/home-light.png",
-  "/pupcare-companion/screenshots/home-dark.png"
+  "/pupcare-companion/screenshots/home-dark.png",
+  OFFLINE_URL
 ];
 
 // Install Event - Cache Static Assets
@@ -38,12 +40,12 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch Event - Serve Cached Files or Fetch Online
+// Fetch Event - Serve Cached Files or Offline Page
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request).then((response) => {
+      return response || caches.match(OFFLINE_URL);
+    }))
   );
 });
 
