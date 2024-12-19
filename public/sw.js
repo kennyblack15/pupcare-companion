@@ -1,74 +1,74 @@
-importScripts('./service-worker/cache-manager.js');
-importScripts('./service-worker/sync-manager.js');
-importScripts('./service-worker/notification-handler.js');
+// Service Worker for PawCare Companion
+const CACHE_NAME = "pawcare-cache-v1";
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png",
+  "/icons/maskable_icon_x192.png",
+  "/screenshots/home-light.png",
+  "/screenshots/home-dark.png"
+];
 
-// Force HTTPS
-self.addEventListener('fetch', (event) => {
-  // Check if the request is for HTTP
-  if (event.request.url.startsWith('http:') && !event.request.url.includes('localhost')) {
-    // Create a new request with HTTPS
-    const secureUrl = event.request.url.replace('http:', 'https:');
-    event.respondWith(
-      fetch(new Request(secureUrl, event.request))
-    );
-    return;
-  }
-
-  // Handle other requests normally
-  if (event.request.method !== 'GET') return;
-  event.respondWith(handleFetch(event));
-});
-
-// Install event - cache static assets
-self.addEventListener('install', (event) => {
-  event.waitUntil(initCache());
+// Install Event - Cache Static Assets
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("Caching essential files...");
+      return cache.addAll(urlsToCache);
+    })
+  );
   self.skipWaiting();
 });
 
-// Activate event - cleanup old caches and register periodic sync
-self.addEventListener('activate', (event) => {
+// Activate Event - Cleanup Old Caches
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    Promise.all([
-      cleanupOldCaches(),
-      // Enable periodic background sync if supported
-      (async () => {
-        if ('periodicSync' in self.registration) {
-          try {
-            await self.registration.periodicSync.register('sync-content', {
-              minInterval: 24 * 60 * 60 * 1000 // 24 hours
-            });
-          } catch (error) {
-            console.error('Periodic Sync could not be registered:', error);
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log("Clearing old cache:", cache);
+            return caches.delete(cache);
           }
-        }
-      })()
-    ])
+        })
+      );
+    })
   );
   self.clients.claim();
 });
 
-// Background sync event
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-health-records') {
-    event.waitUntil(syncHealthRecords());
-  } else if (event.tag === 'sync-medications') {
-    event.waitUntil(syncMedications());
-  }
+// Fetch Event - Serve Cached Files or Fetch Online
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
 });
 
-// Periodic background sync
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'sync-content') {
+// Background Sync Event
+self.addEventListener("sync", (event) => {
+  if (event.tag === "sync-content") {
     event.waitUntil(syncAllContent());
   }
 });
 
-// Push notification event
-self.addEventListener('push', (event) => {
-  event.waitUntil(handlePushEvent(event));
+// Push Notification Event
+self.addEventListener("push", (event) => {
+  const title = "PawCare Notification";
+  const options = {
+    body: event.data ? event.data.text() : "New updates from PawCare!",
+    icon: "/icons/icon-192x192.png",
+    badge: "/icons/icon-192x192.png"
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Notification click event
-self.addEventListener('notificationclick', (event) => {
-  event.waitUntil(handleNotificationClick(event));
+// Notification Click Event
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow("/")
+  );
 });
