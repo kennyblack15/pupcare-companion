@@ -72,5 +72,10 @@
         }
       ]
     }
-  ]
+  ],
+  "serviceworker": {
+    "src": "sw.js",
+    "scope": "/",
+    "type": "classic"
+  }
 }
