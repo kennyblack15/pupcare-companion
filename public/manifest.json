@@ -1,64 +1,62 @@
 {
-  "name": "PawCare Companion",
-  "short_name": "PawCare",
-  "description": "Your complete pet care management solution",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#8B5CF6",
-  "theme_color": "#8B5CF6",
-  "orientation": "portrait",
-  "id": "/",
-  "scope": "/",
-  "categories": ["lifestyle", "health"],
-"icons": [
-  {
-    "src": "icons/icon-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  }
-]
-
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-light.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen in light mode"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-dark.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen in dark mode"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Add Dog Profile",
-      "url": "/profiles",
-      "icons": [
+    "name": "PawCare Companion",
+    "short_name": "PawCare",
+    "description": "Your complete pet care management solution",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#8B5CF6",
+    "theme_color": "#8B5CF6",
+    "orientation": "portrait",
+    "id": "/",
+    "scope": "/",
+    "categories": [
+        "lifestyle",
+        "health"
+    ],
+    "icons": [
         {
-          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
-          "sizes": "96x96"
+            "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
         }
-      ]
-    },
-    {
-      "name": "Health Records",
-      "url": "/health",
-      "icons": [
+    ],
+    "screenshots": [
         {
-          "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
-          "sizes": "96x96"
+            "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-light.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Home screen in light mode"
+        },
+        {
+            "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/screenshots/home-dark.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Home screen in dark mode"
         }
-      ]
-    }
-  ]
+    ],
+    "shortcuts": [
+        {
+            "name": "Add Dog Profile",
+            "url": "/profiles",
+            "icons": [
+                {
+                    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Health Records",
+            "url": "/health",
+            "icons": [
+                {
+                    "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
 }
-
-
