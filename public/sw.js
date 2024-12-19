@@ -1,13 +1,13 @@
 // Service Worker for PawCare Companion
 const CACHE_NAME = "pawcare-cache-v1";
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/icons/icon-192x192.png",
-  "/icons/icon-512x512.png",
-  "/icons/maskable_icon_x192.png",
-  "/screenshots/home-light.png",
-  "/screenshots/home-dark.png"
+  "/pupcare-companion/",
+  "/pupcare-companion/index.html",
+  "/pupcare-companion/icons/icon-192x192.png",
+  "/pupcare-companion/icons/icon-512x512.png",
+  "/pupcare-companion/icons/maskable_icon_x192.png",
+  "/pupcare-companion/screenshots/home-light.png",
+  "/pupcare-companion/screenshots/home-dark.png"
 ];
 
 // Install Event - Cache Static Assets
@@ -18,7 +18,7 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache);
     })
   );
-  self.skipWaiting(); // Activate service worker immediately
+  self.skipWaiting();
 });
 
 // Activate Event - Cleanup Old Caches
@@ -35,7 +35,7 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
-  self.clients.claim(); // Claim the client immediately
+  self.clients.claim();
 });
 
 // Fetch Event - Serve Cached Files or Fetch Online
@@ -67,8 +67,8 @@ self.addEventListener("push", (event) => {
   const title = "PawCare Notification";
   const options = {
     body: event.data ? event.data.text() : "New updates from PawCare!",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/icon-192x192.png"
+    icon: "/pupcare-companion/icons/icon-192x192.png",
+    badge: "/pupcare-companion/icons/icon-192x192.png"
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });
@@ -77,6 +77,7 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   event.waitUntil(
-    clients.openWindow("/")
+    clients.openWindow("/pupcare-companion/")
   );
 });
+
