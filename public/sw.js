@@ -49,9 +49,17 @@ self.addEventListener('activate', (event) => {
 
 // Background sync event
 self.addEventListener('sync', (event) => {
-  if (event.tag.startsWith('sync-')) {
-    const storeName = event.tag.replace('sync-', '');
-    event.waitUntil(syncData(storeName));
+  if (event.tag === 'sync-health-records') {
+    event.waitUntil(syncHealthRecords());
+  } else if (event.tag === 'sync-medications') {
+    event.waitUntil(syncMedications());
+  }
+});
+
+// Periodic background sync
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'sync-content') {
+    event.waitUntil(syncAllContent());
   }
 });
 
