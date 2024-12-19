@@ -15,27 +15,27 @@
   "launch_handler": {
     "client_mode": ["navigate-existing", "auto"]
   },
-  "icons": [
-    {
-     {
-  "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
-  "sizes": "192x192",
-  "type": "image/png",
-  "purpose": "any"
-}
+"icons": [
+  {
+    "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "https://kennyblack15.github.io/pupcare-companion/icons/maskable_icon_x192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
+]
 
-    },
-    {
-      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/maskable_icon_x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ],
   "screenshots": [
