@@ -27,16 +27,12 @@
     {
       "src": "https://your-secure-host/screenshots/home-light.png",
       "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen in light mode"
+      "type": "image/png"
     },
     {
       "src": "https://your-secure-host/screenshots/home-dark.png",
       "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen in dark mode"
+      "type": "image/png"
     }
   ],
   "shortcuts": [
@@ -65,6 +61,5 @@
     "client_mode": "navigate-new"
   }
 }
-
 
   
