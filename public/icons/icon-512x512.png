@@ -1,4 +1,5 @@
-"icons": [
+"icons": [Updated manifest.json with corrected icon URL
+
   {
     "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
     "sizes": "512x512",
