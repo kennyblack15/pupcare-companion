@@ -1,4 +1,5 @@
-{
+{Corrected manifest.json for Bubblewrap bundling
+
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
