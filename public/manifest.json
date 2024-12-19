@@ -12,27 +12,27 @@
   "categories": ["lifestyle", "health", "productivity"],
   "icons": [
     {
-      "src": "icons/icon-512x512.png",
+      "src": "https://your-secure-host/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-192x192.png",
+      "src": "https://your-secure-host/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "screenshots/home-light.png",
+      "src": "https://your-secure-host/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Home screen in light mode"
     },
     {
-      "src": "screenshots/home-dark.png",
+      "src": "https://your-secure-host/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
@@ -45,7 +45,7 @@
       "url": "/profiles",
       "icons": [
         {
-          "src": "icons/icon-96x96.png",
+          "src": "https://your-secure-host/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -55,10 +55,12 @@
       "url": "/health",
       "icons": [
         {
-          "src": "icons/icon-96x96.png",
+          "src": "https://your-secure-host/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     }
   ]
 }
+
+  
