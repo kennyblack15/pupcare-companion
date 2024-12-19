@@ -1,15 +1,18 @@
 {
   "name": "PawCare Companion",
   "short_name": "PawCare",
-  "description": "A complete pet care management solution.",
+  "description": "PawCare Companion is a complete pet care management solution for tracking pet health, activities, and records.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
-  "orientation": "portrait-primary",
-  "id": "pawcare-companion",
+  "orientation": "portrait",
+  "id": "/pawcare-companion",
   "scope": "/",
   "categories": ["lifestyle", "health", "productivity"],
+  "dir": "ltr",
+  "lang": "en-US",
+  "iarc_rating_id": "E",
   "icons": [
     {
       "src": "https://your-secure-host/icons/icon-512x512.png",
@@ -28,13 +31,13 @@
       "src": "https://your-secure-host/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Home screen in light mode"
+      "label": "Home screen"
     },
     {
       "src": "https://your-secure-host/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Home screen in dark mode"
+      "label": "Dark mode home screen"
     }
   ],
   "shortcuts": [
@@ -66,5 +69,10 @@
     "src": "service-worker.js",
     "scope": "/",
     "type": "classic"
-  }
+  },
+  "scope_extensions": [
+    {
+      "origin": "https://your-secure-host"
+    }
+  ]
 }
