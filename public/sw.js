@@ -54,6 +54,14 @@ self.addEventListener("sync", (event) => {
   }
 });
 
+// Periodic Sync Event
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === "sync-content") {
+    console.log("Periodic Sync: Syncing content...");
+    event.waitUntil(syncAllContent());
+  }
+});
+
 // Push Notification Event
 self.addEventListener("push", (event) => {
   const title = "PawCare Notification";
