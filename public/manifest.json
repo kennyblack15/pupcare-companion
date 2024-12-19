@@ -10,15 +10,12 @@
   "id": "/",
   "scope": "/",
   "categories": ["lifestyle", "health"],
-"icons": [
-  {
-    "src": "https://raw.githubusercontent.com/YourGitHubUsername/pupcare-companion/main/public/icons/icon-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  }
-]
-
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-192x192.png",
@@ -63,8 +60,7 @@
     {
       "name": "Health Records",
       "url": "/health",
-      "icons": [Fixed icon URL in manifest.json
-
+      "icons": [
         {
           "src": "https://raw.githubusercontent.com/kennyblack15/pupcare-companion/main/public/icons/icon-96x96.png",
           "sizes": "96x96"
