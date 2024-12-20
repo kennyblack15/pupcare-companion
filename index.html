@@ -6,15 +6,15 @@
     <title>PawCare Companion</title>
 
     <!-- Web Manifest -->
-    <link rel="manifest" href="/pupcare-companion/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- Icons -->
-    <link rel="icon" href="/pupcare-companion/icons/icon-192x192.png" />
+    <link rel="icon" href="/icons/icon-192x192.png" />
 
     <!-- Content Security Policy -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self' https://images.unsplash.com; script-src 'self' https://kennyblack15.github.io; style-src 'self' 'unsafe-inline'; img-src 'self' https://images.unsplash.com data:; connect-src 'self';"
+      content="default-src 'self' https://images.unsplash.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://images.unsplash.com data:; connect-src 'self' https://uxbfgennjhmsoglrcuwl.supabase.co;"
     >
 
     <!-- Theme Colors -->
@@ -22,24 +22,6 @@
   </head>
   <body>
     <div id="root"></div>
-
-    <!-- Main JavaScript File -->
-    <script src="/pupcare-companion/main.js" type="module"></script>
-
-    <!-- Service Worker Registration -->
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/pupcare-companion/sw.js")
-            .then((registration) => {
-              console.log("Service Worker registered with scope:", registration.scope);
-            })
-            .catch((error) => {
-              console.error("Service Worker registration failed:", error.message);
-            });
-        });
-      }
-    </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
