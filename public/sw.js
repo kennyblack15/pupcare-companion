@@ -13,15 +13,15 @@ const urlsToCache = [
 ];
 
 // Install Event - Cache Static Assets
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Caching essential files...");
-      return cache.addAll(urlsToCache);
+// Fetch Event - Serve Cached Files or Offline Page
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request).catch(() => caches.match(OFFLINE_URL));
     })
   );
-  self.skipWaiting();
 });
+
 
 // Activate Event - Cleanup Old Caches
 self.addEventListener("activate", (event) => {
