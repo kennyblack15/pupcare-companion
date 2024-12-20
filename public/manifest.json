@@ -1,9 +1,4 @@
-# Save the updated PWA manifest file to a downloadable path
-updated_manifest_file_path = '/mnt/data/pwa_manifest_updated.json'
 
-# Write the current content of the manifest file to a downloadable file
-with open(updated_manifest_file_path, 'w') as file:
-    file.write('''{
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
