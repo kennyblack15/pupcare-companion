@@ -1,6 +1,7 @@
 // Service Worker for PawCare Companion
 const CACHE_NAME = "pawcare-cache-v2";
 const OFFLINE_URL = "/pupcare-companion/offline.html";
+
 const urlsToCache = [
   "/pupcare-companion/",
   "/pupcare-companion/index.html",
@@ -13,15 +14,15 @@ const urlsToCache = [
 ];
 
 // Install Event - Cache Static Assets
-// Fetch Event - Serve Cached Files or Offline Page
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).catch(() => caches.match(OFFLINE_URL));
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("Caching essential files...");
+      return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting();
 });
-
 
 // Activate Event - Cleanup Old Caches
 self.addEventListener("activate", (event) => {
@@ -43,9 +44,12 @@ self.addEventListener("activate", (event) => {
 // Fetch Event - Serve Cached Files or Offline Page
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request).then((response) => {
-      return response || caches.match(OFFLINE_URL);
-    }))
+    caches.match(event.request).then((response) => {
+      return (
+        response ||
+        fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+      );
+    })
   );
 });
 
@@ -78,8 +82,12 @@ self.addEventListener("push", (event) => {
 // Notification Click Event
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow("/pupcare-companion/")
-  );
+  event.waitUntil(clients.openWindow("/pupcare-companion/"));
 });
+
+// Background Sync Function (Placeholder)
+async function syncAllContent() {
+  console.log("Syncing content... Add your sync logic here.");
+}
+
 
