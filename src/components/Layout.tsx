@@ -13,7 +13,7 @@ export function Layout({ children }: LayoutProps) {
         <AppSidebar />
         <main className="flex-1">
           <header 
-            className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b shadow-sm" 
+            className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b shadow-sm px-4" 
             style={{ 
               paddingTop: 'env(titlebar-area-height, 0px)',
               WebkitUserSelect: 'none',
