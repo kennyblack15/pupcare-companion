@@ -1,4 +1,4 @@
-
+{
   "name": "PawCare Companion",
   "short_name": "PawCare",
   "description": "Your complete pet care management solution",
@@ -150,7 +150,6 @@
       ]
     }
   ]
-}''')
+}
 
-updated_manifest_file_path
 
