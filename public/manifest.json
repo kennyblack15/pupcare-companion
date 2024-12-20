@@ -4,33 +4,27 @@
   "description": "Your complete pet care management solution",
   "start_url": "/pupcare-companion/index.html",
   "display": "standalone",
-  "display_override": ["standalone", "window-controls-overlay"],
   "background_color": "#8B5CF6",
   "theme_color": "#8B5CF6",
   "orientation": "portrait",
   "id": "/pupcare-companion",
   "scope": "/pupcare-companion/",
   "categories": ["lifestyle", "health"],
-  "dir": "ltr",
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
-  "launch_handler": {
-    "client_mode": ["navigate-existing", "auto"]
-  },
   "icons": [
     {
-      "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-192x192.png",
+      "src": "/pupcare-companion/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-512x512.png",
+      "src": "/pupcare-companion/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://kennyblack15.github.io/pupcare-companion/icons/maskable_icon_x192.png",
+      "src": "/pupcare-companion/icons/maskable_icon_x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
@@ -38,14 +32,14 @@
   ],
   "screenshots": [
     {
-      "src": "https://kennyblack15.github.io/pupcare-companion/screenshots/home-light.png",
+      "src": "/pupcare-companion/screenshots/home-light.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Home screen in light mode"
     },
     {
-      "src": "https://kennyblack15.github.io/pupcare-companion/screenshots/home-dark.png",
+      "src": "/pupcare-companion/screenshots/home-dark.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
@@ -54,11 +48,11 @@
   ],
   "shortcuts": [
     {
-      "name": "Add Dog Profile",
+      "name": "Add Pet Profile",
       "url": "/pupcare-companion/profiles",
       "icons": [
         {
-          "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-96x96.png",
+          "src": "/pupcare-companion/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -68,15 +62,11 @@
       "url": "/pupcare-companion/health",
       "icons": [
         {
-          "src": "https://kennyblack15.github.io/pupcare-companion/icons/icon-96x96.png",
+          "src": "/pupcare-companion/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     }
-  ],
-  "serviceworker": {
-    "src": "/pupcare-companion/sw.js",
-    "scope": "/pupcare-companion/",
-    "type": "classic"
-  }
+  ]
 }
+
