@@ -1,4 +1,6 @@
 <<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,6 +26,23 @@
 
     <!-- Main JavaScript File -->
     <script src="/pupcare-companion/main.js" type="module"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/pupcare-companion/sw.js")
+            .then((registration) => {
+              console.log("Service Worker registered with scope:", registration.scope);
+            })
+            .catch((error) => {
+              console.error("Service Worker registration failed:", error.message);
+            });
+        });
+      }
+    </script>
   </body>
-</html>!DOCTYPE html>
+</html>
+
 
