@@ -2,140 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PawCare Companion</title>
-    <meta name="description" content="Your complete pet care management solution" />
-    <meta name="theme-color" content="#8B5CF6" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="PawCare" />
-    <meta name="application-name" content="PawCare" />
-    
+
     <!-- Web Manifest -->
-    <link rel="manifest" href="manifest.json" />
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-72x72.png" />
-    
-    <!-- PWA Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png" />
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png" />
-    
-    <style>
-      :root {
-        color-scheme: light dark;
-      }
-      
-      @media (display-mode: window-controls-overlay) {
-        body {
-          padding-top: env(titlebar-area-height, 33px);
-        }
-        
-        #titlebar-region {
-          position: fixed;
-          top: 0;
-          left: env(titlebar-area-x, 0);
-          width: env(titlebar-area-width, 100%);
-          height: env(titlebar-area-height, 33px);
-          background: #8B5CF6;
-          color: white;
-          display: flex;
-          align-items: center;
-          padding: 0 1rem;
-          -webkit-app-region: drag;
-          app-region: drag;
-        }
-      }
-      
-      #splash-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #8B5CF6;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        z-index: 9999;
-        transition: opacity 0.3s ease-out;
-      }
-      #splash-screen img {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 20px;
-        animation: pulse 2s infinite;
-      }
-      #splash-screen.fade-out {
-        opacity: 0;
-      }
-      .splash-title {
-        color: white;
-        font-size: 24px;
-        font-weight: bold;
-        margin-top: 16px;
-        animation: fadeIn 1s ease-out;
-      }
-      @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-      }
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-    </style>
+    <link rel="manifest" href="/pupcare-companion/manifest.json" />
+
+    <!-- Icons -->
+    <link rel="icon" href="/pupcare-companion/icons/icon-192x192.png" />
+
+    <!-- Content Security Policy -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' https://kennyblack15.github.io; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
+    >
+
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#8B5CF6" />
   </head>
   <body>
-    <div id="titlebar-region">
-      <h1>PawCare</h1>
-    </div>
-    <div id="splash-screen">
-      <img src="icons/icon-192x192.png" alt="PawCare" />
-      <div class="splash-title">PawCare</div>
-    </div>
     <div id="root"></div>
-    
-    <script>
-      // Force HTTPS
-      if (window.location.protocol === 'http:' && !window.location.hostname.includes('localhost')) {
-        window.location.href = window.location.href.replace('http:', 'https:');
-      }
-      
-      // Handle splash screen
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          const splashScreen = document.getElementById('splash-screen');
-          splashScreen.classList.add('fade-out');
-          setTimeout(() => {
-            splashScreen.style.display = 'none';
-          }, 300);
-        }, 2000);
-      });
 
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful:', registration);
-            })
-            .catch(error => {
-              console.error('ServiceWorker registration failed:', error);
-            });
-        });
-      }
-    </script>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Main JavaScript File -->
+    <script src="/pupcare-companion/main.js" type="module"></script>
   </body>
 </html>
