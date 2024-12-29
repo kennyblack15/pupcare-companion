@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pawcare-v3';
+const CACHE_NAME = 'pawcare-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -7,8 +7,7 @@ const STATIC_ASSETS = [
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/maskable_icon_x192.png',
-  '/screenshots/home-light.png',
-  '/screenshots/home-dark.png'
+  '/icons/icon-96x96.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -40,8 +39,8 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        return fetch(event.request).then((response) => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+        return fetch(event.request.clone()).then((response) => {
+          if (!response || response.status !== 200) {
             return response;
           }
           const responseToCache = response.clone();
